@@ -34,5 +34,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/', function() {
         return redirect()->route('admin.dashboard');
     })->name('admin.home');
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/users/{id}', [AdminController::class, 'showUser'])->name('users.show');
 });
 require __DIR__.'/auth.php';

@@ -23,4 +23,14 @@ class AdminController extends Controller
             'recentOrders'
         ));
     }
+    public function users()
+{
+    $users = User::with('wallet')->latest()->paginate(20);
+    return view('admin.users', compact('users'));
+}
+public function showUser($id)
+{
+    $user = User::with('wallet', 'orders')->findOrFail($id);
+    return view('admin.users.show', compact('user'));
+}
 }

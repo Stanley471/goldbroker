@@ -8,10 +8,11 @@
 </head>
 <body class="bg-gray-100">
 
-    <nav class="bg-yellow-600 text-white px-6 py-4 flex justify-between">
+    <nav class="bg-yellow-600 text-black px-6 py-4 flex justify-between">
         <span class="font-bold text-lg">GoldBrokers Admin</span>
         <div class="flex gap-4">
             <a href="{{ route('admin.dashboard') }}" class="hover:underline">Dashboard</a>
+            <a href="{{ route('admin.users') }}" class="hover:underline">Users</a>
         </div>
     </nav>
 
