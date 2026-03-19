@@ -34,5 +34,8 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'goldapi' => [
+        'key' => env('GOLD_API_KEY'),
+    ],
 
 ];
