@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Transaction;
 
 class User extends Authenticatable
 {
@@ -71,5 +72,9 @@ class User extends Authenticatable
 public function wallet()
 {
     return $this->hasOne(Wallet::class);
+}
+public function transactions()
+{
+    return $this->hasMany(Transaction::class);
 }
 }
