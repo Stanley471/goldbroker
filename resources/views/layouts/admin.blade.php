@@ -13,6 +13,7 @@
         <div class="flex gap-4">
             <a href="{{ route('admin.dashboard') }}" class="hover:underline">Dashboard</a>
             <a href="{{ route('admin.users') }}" class="hover:underline">Users</a>
+            <a href="{{ route('admin.orders') }}" class="hover:underline">Orders</a>
         </div>
     </nav>
 

@@ -33,4 +33,9 @@ public function showUser($id)
     $user = User::with('wallet', 'orders')->findOrFail($id);
     return view('admin.users.show', compact('user'));
 }
+public function orders()
+{
+    $orders = Order::with('user')->latest()->paginate(20);
+    return view('admin.orders', compact('orders'));
+}
 }
