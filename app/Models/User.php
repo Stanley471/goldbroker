@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Transaction;
+use App\Models\Order;
 
 class User extends Authenticatable
 {
@@ -76,5 +77,9 @@ public function wallet()
 public function transactions()
 {
     return $this->hasMany(Transaction::class);
+}
+public function orders()
+{
+    return $this->hasMany(Order::class);
 }
 }
