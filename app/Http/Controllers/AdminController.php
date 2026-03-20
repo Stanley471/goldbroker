@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\User;
+use App\Models\AdminLog;
 
 class AdminController extends Controller
 {
@@ -37,5 +38,10 @@ public function orders()
 {
     $orders = Order::with('user')->latest()->paginate(20);
     return view('admin.orders', compact('orders'));
+}
+public function logs()
+{
+    $logs = AdminLog::with('admin')->latest()->paginate(20);
+    return view('admin.logs', compact('logs'));
 }
 }

@@ -37,5 +37,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::get('/users/{id}', [AdminController::class, 'showUser'])->name('users.show');
     Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
+    Route::get('/logs', [AdminController::class, 'logs'])->name('logs');
 });
 require __DIR__.'/auth.php';
