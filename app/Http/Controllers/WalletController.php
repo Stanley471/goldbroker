@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Services\WalletService;
-use Illuminate\Http\Request;
+
 use App\Models\User;
+use App\Http\Requests\DepositRequest;
 
 class WalletController extends Controller
 {
@@ -20,11 +21,8 @@ class WalletController extends Controller
         return view('wallet.index', compact('wallet', 'transactions'));
     }
 
-    public function deposit(Request $request)
+    public function deposit(DepositRequest $request)
     {
-        $request->validate([
-            'amount' => ['required', 'numeric', 'min:1', 'max:100000'],
-        ]);
 
         /** @var User $user */
         $user = $request->user();

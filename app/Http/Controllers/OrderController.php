@@ -3,17 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Services\OrderService;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request;        
+use App\Http\Requests\BuyGoldRequest;
+use App\Http\Requests\SellGoldRequest;
 
 class OrderController extends Controller
 {
     public function __construct(private OrderService $orderService) {}
 
-    public function buy(Request $request)
+    public function buy(BuyGoldRequest $request)
     {
-        $request->validate([
-            'grams' => ['required', 'numeric', 'min:0.1'],
-        ]);
 
         /** @var \App\Models\User $user */
         $user = auth()->user();
@@ -26,7 +25,7 @@ class OrderController extends Controller
         }
     }
 
-    public function sell(Request $request)
+    public function sell(SellGoldRequest $request)
     {
         $request->validate([
             'grams' => ['required', 'numeric', 'min:0.1'],
