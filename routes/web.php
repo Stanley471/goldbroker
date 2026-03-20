@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\IraController;
+use App\Http\Controllers\ReferralController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,6 +35,7 @@ Route::get('/ira/create', [IraController::class, 'create'])->name('ira.create');
 Route::post('/ira', [IraController::class, 'store'])->name('ira.store');
 Route::get('/ira/{iraAccount}', [IraController::class, 'show'])->name('ira.show');
 Route::post('/ira/{iraAccount}/transfer', [IraController::class, 'transfer'])->name('ira.transfer');
+Route::get('/referrals', [ReferralController::class, 'index'])->name('referrals.index');
 });
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');

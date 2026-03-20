@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class OrderService
 {
-    public function __construct(private WalletService $walletService) {}
+    public function __construct(private WalletService $walletService, private ReferralService $referralService) {}
 
     public function buy(User $user, float $grams): Order
     {
@@ -36,10 +36,14 @@ class OrderService
                 'status' => 'completed',
                 'reference_number' => strtoupper(Str::random(10)),
             ]);
-
+        
             $this->walletService->debitUSD($user, $totalUsd, 'Gold purchase - ' . $order->reference_number);
             $this->walletService->creditGold($user, $grams, 'Gold purchase - ' . $order->reference_number);
-
+        
+            if ($user->orders()->count() === 1) {
+                $this->referralService->processReferralBonus($user);
+            }
+        
             return $order;
         });
     }
