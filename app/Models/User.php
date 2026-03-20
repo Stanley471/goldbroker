@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Transaction;
 use App\Models\Order;
+use App\Models\IraAccount;
 
 class User extends Authenticatable
 {
@@ -81,5 +82,9 @@ public function transactions()
 public function orders()
 {
     return $this->hasMany(Order::class);
+}
+public function iraAccounts()
+{
+    return $this->hasMany(IraAccount::class);
 }
 }

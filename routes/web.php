@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\IraController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +29,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/orders/buy', [OrderController::class, 'buy'])->name('orders.buy')->middleware('throttle:10,1');
     Route::post('/orders/sell', [OrderController::class, 'sell'])->name('orders.sell')->middleware('throttle:10,1');
+    Route::get('/ira', [IraController::class, 'index'])->name('ira.index');
+Route::get('/ira/create', [IraController::class, 'create'])->name('ira.create');
+Route::post('/ira', [IraController::class, 'store'])->name('ira.store');
+Route::get('/ira/{iraAccount}', [IraController::class, 'show'])->name('ira.show');
+Route::post('/ira/{iraAccount}/transfer', [IraController::class, 'transfer'])->name('ira.transfer');
 });
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
