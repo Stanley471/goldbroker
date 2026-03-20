@@ -36,6 +36,10 @@ Route::post('/ira', [IraController::class, 'store'])->name('ira.store');
 Route::get('/ira/{iraAccount}', [IraController::class, 'show'])->name('ira.show');
 Route::post('/ira/{iraAccount}/transfer', [IraController::class, 'transfer'])->name('ira.transfer');
 Route::get('/referrals', [ReferralController::class, 'index'])->name('referrals.index');
+Route::middleware(['throttle:10,1'])->group(function () {
+    Route::post('/orders/buy', [OrderController::class, 'buy'])->name('orders.buy');
+    Route::post('/orders/sell', [OrderController::class, 'sell'])->name('orders.sell');
+});
 });
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
