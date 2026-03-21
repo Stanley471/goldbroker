@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Referral;
 
+
 class ReferralController extends Controller
 {
     public function index()

@@ -6,6 +6,7 @@ use App\Services\WalletService;
 
 use App\Models\User;
 use App\Http\Requests\DepositRequest;
+use Illuminate\Http\Request;
 
 class WalletController extends Controller
 {
