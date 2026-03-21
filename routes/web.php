@@ -10,7 +10,8 @@ use App\Http\Controllers\IraController;
 use App\Http\Controllers\ReferralController;
 
 Route::get('/', function () {
-    return view('welcome');
+    $goldPrice = app(\App\Services\GoldPriceService::class)->getCurrentPrice();
+    return view('welcome', compact('goldPrice'));
 });
 
 Route::get('/dashboard', function () {

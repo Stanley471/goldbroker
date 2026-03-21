@@ -12,9 +12,25 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    <!-- Dashboard -->
+<x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+    {{ __('Dashboard') }}
+</x-nav-link>
+
+<!-- Wallet -->
+<x-nav-link :href="route('wallet.index')" :active="request()->routeIs('wallet.*')">
+    {{ __('Wallet') }}
+</x-nav-link>
+
+<!-- IRA -->
+<x-nav-link :href="route('ira.index')" :active="request()->routeIs('ira.*')">
+    {{ __('IRA') }}
+</x-nav-link>
+
+<!-- Referrals -->
+<x-nav-link :href="route('referrals.index')" :active="request()->routeIs('referrals.*')">
+    {{ __('Referrals') }}
+</x-nav-link>
                 </div>
             </div>
 
