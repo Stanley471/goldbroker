@@ -31,8 +31,11 @@ class AdminController extends Controller
 }
 public function showUser($id)
 {
-    $user = User::with('wallet', 'orders')->findOrFail($id);
-    return view('admin.users.show', compact('user'));
+    $user = User::findOrFail($id);
+    $orders = $user->orders()->latest()->get();
+    $transactions = $user->transactions()->latest()->get();
+
+    return view('admin.users.show', compact('user', 'orders', 'transactions'));
 }
 public function orders()
 {
