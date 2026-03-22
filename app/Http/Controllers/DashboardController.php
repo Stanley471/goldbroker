@@ -19,7 +19,9 @@ class DashboardController extends Controller
 
     $wallet = $user->wallet;
     $goldPrice = $this->goldPriceService->getCurrentPrice();
+    $priceChange = $this->goldPriceService->get24hChange();
 
-    return view('dashboard', compact('wallet', 'goldPrice'));
+    return view('dashboard', compact('wallet', 'goldPrice', 'priceChange'));
 }
+
 }

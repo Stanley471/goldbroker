@@ -37,4 +37,22 @@ class GoldPriceService
         return GoldPrice::latest('fetched_at')->first();
     });
 }
+public function get24hChange(): ?array
+{
+    $latest = GoldPrice::latest('fetched_at')->first();
+    $yesterday = GoldPrice::where('fetched_at', '<=', now()->subHours(24))
+        ->latest('fetched_at')
+        ->first();
+
+    if (!$latest || !$yesterday) return null;
+
+    $change = $latest->price_per_gram_usd - $yesterday->price_per_gram_usd;
+    $percent = ($change / $yesterday->price_per_gram_usd) * 100;
+
+    return [
+        'change' => $change,
+        'percent' => $percent,
+        'direction' => $change >= 0 ? 'up' : 'down',
+    ];
+}
 }   
