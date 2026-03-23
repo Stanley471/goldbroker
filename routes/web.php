@@ -51,5 +51,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/users/{id}', [AdminController::class, 'showUser'])->name('users.show');
     Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
     Route::get('/logs', [AdminController::class, 'logs'])->name('logs');
+    Route::patch('/users/{id}/kyc', [AdminController::class, 'updateKyc'])->name('users.kyc');
 });
 require __DIR__.'/auth.php';

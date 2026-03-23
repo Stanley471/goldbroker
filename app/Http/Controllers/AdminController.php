@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\AdminLog;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -46,5 +47,20 @@ public function logs()
 {
     $logs = AdminLog::with('admin')->latest()->paginate(20);
     return view('admin.logs', compact('logs'));
+}
+public function updateKyc($id, Request $request)
+{
+    $user = User::findOrFail($id);
+    $user->update(['kyc_status' => $request->kyc_status]);
+
+    AdminLog::create([
+        'admin_id' => auth()->id(),
+        'action' => 'KYC status updated to ' . $request->kyc_status,
+        'target_type' => 'User',
+        'target_id' => $user->id,
+        'notes' => 'Updated by admin',
+    ]);
+
+    return back()->with('success', 'KYC status updated to ' . $request->kyc_status);
 }
 }

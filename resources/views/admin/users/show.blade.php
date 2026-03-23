@@ -79,7 +79,7 @@
         <h2 class="text-lg font-semibold text-white mb-4" style="font-family: 'Playfair Display';">KYC Management</h2>
         <p class="text-[#A0A0A0] text-sm mb-6">Current status: <span class="text-white font-medium">{{ ucfirst($user->kyc_status) }}</span></p>
         <div class="flex flex-col sm:flex-row gap-3">
-            <form method="POST" action="{{ route('admin.users.show', $user->id) }}" class="flex-1">
+            <form method="POST" action="{{ route('admin.users.kyc', $user->id) }}" class="flex-1">
                 @csrf
                 @method('PATCH')
                 <input type="hidden" name="kyc_status" value="approved">
@@ -87,7 +87,7 @@
                     Approve KYC
                 </button>
             </form>
-            <form method="POST" action="{{ route('admin.users.show', $user->id) }}" class="flex-1">
+            <form method="POST" action="{{ route('admin.users.kyc', $user->id) }}" class="flex-1">
                 @csrf
                 @method('PATCH')
                 <input type="hidden" name="kyc_status" value="rejected">
