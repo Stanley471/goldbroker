@@ -69,6 +69,7 @@ class User extends Authenticatable
             'usd_balance' => 0,
             'gold_balance_grams' => 0,
         ]);
+        $user->cart()->create();
     });
 }
 public function wallet()
@@ -86,5 +87,9 @@ public function orders()
 public function iraAccounts()
 {
     return $this->hasMany(IraAccount::class);
+}
+public function cart()
+{
+    return $this->hasOne(Cart::class);
 }
 }

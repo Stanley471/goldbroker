@@ -8,6 +8,7 @@ use App\Http\Controllers\WalletController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\IraController;
 use App\Http\Controllers\ReferralController;
+use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
     $goldPrice = app(\App\Services\GoldPriceService::class)->getCurrentPrice();
@@ -28,19 +29,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
     Route::post('/wallet/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
-
     Route::post('/orders/buy', [OrderController::class, 'buy'])->name('orders.buy')->middleware('throttle:10,1');
     Route::post('/orders/sell', [OrderController::class, 'sell'])->name('orders.sell')->middleware('throttle:10,1');
     Route::get('/ira', [IraController::class, 'index'])->name('ira.index');
-Route::get('/ira/create', [IraController::class, 'create'])->name('ira.create');
-Route::post('/ira', [IraController::class, 'store'])->name('ira.store');
-Route::get('/ira/{iraAccount}', [IraController::class, 'show'])->name('ira.show');
-Route::post('/ira/{iraAccount}/transfer', [IraController::class, 'transfer'])->name('ira.transfer');
-Route::get('/referrals', [ReferralController::class, 'index'])->name('referrals.index');
-Route::middleware(['throttle:10,1'])->group(function () {
+    Route::get('/ira/create', [IraController::class, 'create'])->name('ira.create');
+    Route::post('/ira', [IraController::class, 'store'])->name('ira.store');
+    Route::get('/ira/{iraAccount}', [IraController::class, 'show'])->name('ira.show');
+    Route::post('/ira/{iraAccount}/transfer', [IraController::class, 'transfer'])->name('ira.transfer');
+    Route::get('/referrals', [ReferralController::class, 'index'])->name('referrals.index');
+
+    //cart routes
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::delete('/cart/remove/{cartItem}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+    
+    //throttled routes
+    Route::middleware(['throttle:10,1'])->group(function () {
     Route::post('/orders/buy', [OrderController::class, 'buy'])->name('orders.buy');
     Route::post('/orders/sell', [OrderController::class, 'sell'])->name('orders.sell');
-});
+    
+    });
 });
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
