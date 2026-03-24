@@ -64,6 +64,7 @@
                 <a href="{{ route('wallet.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('wallet.*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Vault</a>
                 <a href="{{ route('ira.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('ira.*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">IRA</a>
                 <a href="{{ route('referrals.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('referrals.*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Referrals</a>
+                <a href="{{ route('products.index')}}" class="px-4 py-3 text-sm {{ request()->routeIs('products.*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Products</a>
                 <div class="border-t border-[#D4AF37]/10 mt-2 pt-2 flex items-center justify-between px-4">
                     <span class="text-sm text-[#A0A0A0]">{{ auth()->user()->first_name }}</span>
                     <form method="POST" action="{{ route('logout') }}">

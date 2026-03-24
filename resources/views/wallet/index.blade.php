@@ -8,71 +8,7 @@
 </head>
 <body class="bg-[#0A0A0A] text-white" style="font-family: 'Inter', sans-serif;">
 
-{{-- Top Bar --}}
-<div class="w-full bg-[#0A0A0A] border-b border-[#D4AF37]/10">
-    <div class="section-container">
-        <div class="section-inner flex items-center justify-between h-10">
-            <div class="flex items-center gap-4 md:gap-6 overflow-x-auto">
-                <div class="flex items-center gap-1.5 px-2 py-0.5 bg-green-500/20 rounded-full flex-shrink-0">
-                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span class="text-xs text-green-500 font-medium">LIVE</span>
-                </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                    <span class="text-xs text-[#A0A0A0] uppercase tracking-wider">Gold</span>
-                    <span class="text-sm font-semibold text-[#D4AF37]">Live Market</span>
-                </div>
-            </div>
-            <a href="/contact" class="hidden sm:flex items-center gap-1.5 text-xs text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
-                Contact us
-            </a>
-        </div>
-    </div>
-</div>
-
-{{-- Navigation --}}
-<nav class="sticky top-0 z-40 bg-[#0A0A0A]/95 backdrop-blur border-b border-[#D4AF37]/20">
-    <div class="section-container">
-        <div class="section-inner flex items-center justify-between h-20">
-            <a href="/" class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-[#D4AF37] to-[#B8860B] rounded-lg flex items-center justify-center">
-                    <span class="text-[#0A0A0A] font-bold text-xl">G</span>
-                </div>
-                <span class="text-xl font-semibold text-white hidden sm:block" style="font-family: 'Playfair Display';">Gold<span class="text-[#D4AF37]">Vault</span></span>
-            </a>
-            <div class="hidden lg:flex items-center gap-1">
-                <a href="{{ route('dashboard') }}" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
-                    Dashboard
-                    <span class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#D4AF37] transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span>
-                </a>
-                <a href="{{ route('wallet.index') }}" class="px-4 py-2 text-sm text-[#D4AF37] transition-colors relative group">
-                    Vault
-                    <span class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#D4AF37]"></span>
-                </a>
-                <a href="{{ route('ira.index') }}" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
-                    IRA
-                    <span class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#D4AF37] transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span>
-                </a>
-                <a href="{{ route('referrals.index') }}" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
-                    Referrals
-                    <span class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#D4AF37] transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span>
-                </a>
-            </div>
-            <div class="flex items-center gap-2">
-                <div class="flex items-center gap-2 px-3 py-2 text-sm text-[#A0A0A0]">
-                    <div class="w-8 h-8 bg-[#D4AF37]/20 rounded-full flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    </div>
-                    <span class="hidden sm:block">{{ auth()->user()->first_name }}</span>
-                </div>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="text-xs text-[#A0A0A0] hover:text-red-400 transition-colors">Logout</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</nav>
+@include('partials.nav-user')
 
 <main class="min-h-screen bg-[#0A0A0A] pt-10 pb-20">
     <div class="section-container">

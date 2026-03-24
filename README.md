@@ -1,59 +1,118 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Gold Broker
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based web application for buying, selling, and managing precious metals (gold and silver) investments. The platform supports physical bullion purchases, digital gold trading, and Gold IRA accounts.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Core Functionality
+- **Live Gold Price Tracking** – Real-time gold and silver prices fetched from external APIs
+- **Buy & Sell Gold** – Purchase and sell digital gold by weight or physical bullion products
+- **Product Catalog** – Browse gold and silver products (coins, bars) with dynamic pricing based on market rates
+- **User Wallet** – Manage USD balance and gold holdings (in grams)
+- **Shopping Cart** – Add products to cart and checkout seamlessly
+- **Secure Vault Storage** – Physical bullion stored in secure vaults across multiple locations
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Investment Features
+- **Gold IRA Accounts** – Create and manage Individual Retirement Accounts backed by physical gold
+- **Referral System** – Invite friends and earn rewards through referral codes
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### User Management
+- **KYC Verification** – Know Your Customer verification process for secure trading
+- **Transaction History** – Complete audit trail of all purchases, sales, and transfers
+- **Role-Based Access** – Separate interfaces for customers and administrators
 
-## Learning Laravel
+### Admin Dashboard
+- Manage products (CRUD operations)
+- View and manage user accounts
+- Process KYC verifications
+- Monitor orders and transactions
+- View system logs and activity
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Tech Stack
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Framework**: Laravel 12 (PHP 8.2+)
+- **Authentication**: Laravel Breeze with email verification
+- **Authorization**: Spatie Laravel Permission (role-based access control)
+- **Frontend**: Tailwind CSS + Alpine.js
+- **Build Tool**: Vite
+- **Database**: SQLite (default), supports MySQL/PostgreSQL
 
-## Laravel Sponsors
+## Project Structure
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Key Models
+- `User` – Customer accounts with referral codes and KYC status
+- `Product` – Bullion products (coins, bars) with dynamic pricing
+- `GoldPrice` – Cached market prices for gold/silver
+- `Wallet` – User balances (USD + gold grams)
+- `Order` – Purchase and sale orders
+- `Transaction` – Financial transaction records
+- `Cart/CartItem` – Shopping cart functionality
+- `IraAccount` – Gold IRA retirement accounts
+- `Vault` – Secure storage locations
+- `Referral` – Referral relationships
+- `AdminLog` – Administrative activity logging
 
-### Premium Partners
+### Routes
+- `/` – Landing page with live gold price
+- `/products` – Product catalog
+- `/dashboard` – User dashboard
+- `/wallet` – Wallet management (deposit, view balance)
+- `/orders` – Buy/sell gold (rate limited)
+- `/cart` – Shopping cart
+- `/checkout` – Checkout process
+- `/ira` – IRA account management
+- `/referrals` – Referral program
+- `/admin` – Admin dashboard (admin only)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Installation
 
-## Contributing
+```bash
+# Clone the repository
+git clone <repository-url>
+cd goldbrokers
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Install dependencies
+composer install
+npm install
 
-## Code of Conduct
+# Environment setup
+cp .env.example .env
+php artisan key:generate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Database setup
+touch database/database.sqlite
+php artisan migrate
 
-## Security Vulnerabilities
+# Build assets
+npm run build
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Or run in development mode
+composer run dev
+```
+
+## Usage
+
+### Default User Roles
+- **User**: Default role for all registered users – can trade gold, manage wallet, and use IRA features
+- **Admin**: Full access to admin dashboard and user management
+
+### Gold Pricing
+- Gold prices are fetched from external APIs and cached
+- Product prices include a 1.5% markup over spot price
+- Silver pricing uses a gold-to-silver ratio approximation
+
+### Rate Limiting
+- Buy/sell endpoints are rate-limited to 10 requests per minute to prevent abuse
+
+## Security Features
+
+- Throttling on critical trading endpoints
+- KYC verification required for trading
+- Role-based access control
+- Admin activity logging
+- CSRF protection on all forms
+- Password hashing with bcrypt
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
