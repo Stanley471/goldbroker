@@ -102,18 +102,17 @@ class WalletController extends Controller
         $amount = $request->get('amount', 0);
         $user = $request->user();
         
-        // Bank transfer details
-        $bankDetails = [
-            'account_name' => 'GoldVault Inc.',
-            'account_number' => '****1234',
-            'routing_number' => '021000021',
-            'swift' => 'CHASUS33',
-            'iban' => 'US64CHAS93001234567890',
-            'bank_name' => 'JPMorgan Chase Bank',
-            'bank_address' => '270 Park Avenue, New York, NY 10017',
-            'reference' => 'GV-' . $user->id . '-' . time(),
-        ];
+        // Get active bank accounts from database
+        $bankAccounts = \App\Models\BankAccount::active()->ordered()->get();
         
-        return view('wallet.deposit-bank', compact('amount', 'bankDetails'));
+        if ($bankAccounts->isEmpty()) {
+            return redirect()->route('wallet.deposit')
+                ->with('error', 'Bank transfers are temporarily unavailable. Please use another payment method.');
+        }
+        
+        // Generate unique reference for this deposit
+        $reference = 'GV-' . $user->id . '-' . strtoupper(substr(md5(uniqid()), 0, 8));
+        
+        return view('wallet.deposit-bank', compact('amount', 'bankAccounts', 'reference'));
     }
 }

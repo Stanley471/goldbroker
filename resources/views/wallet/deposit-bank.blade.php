@@ -23,7 +23,7 @@
             {{-- Header --}}
             <div class="mb-10">
                 <h1 class="text-4xl font-bold text-white mb-2" style="font-family: 'Playfair Display';">Bank Transfer</h1>
-                <p class="text-[#A0A0A0]">Send funds via wire transfer, ACH, or SEPA to credit your account.</p>
+                <p class="text-[#A0A0A0]">Select a bank account and send funds via wire transfer, ACH, or SEPA.</p>
             </div>
 
             @if(session('success'))
@@ -33,132 +33,143 @@
                 <div class="mb-6 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">{{ session('error') }}</div>
             @endif
 
-            <div class="grid lg:grid-cols-2 gap-8 max-w-5xl">
-                
-                {{-- Bank Details --}}
-                <div>
-                    <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 mb-6">
-                        <div class="flex items-center gap-3 mb-6">
-                            <div class="w-12 h-12 bg-[#D4AF37]/20 rounded-lg flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-white font-semibold">Bank Transfer Details</h3>
-                                <p class="text-xs text-[#A0A0A0]">{{ $bankDetails['bank_name'] }}</p>
-                            </div>
+            <div class="max-w-4xl">
+                {{-- Amount Display --}}
+                <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-[#A0A0A0] mb-1">Deposit Amount</p>
+                            <p class="text-3xl font-bold text-[#D4AF37]">${{ number_format($amount, 2) }} <span class="text-lg text-[#A0A0A0]">USD</span></p>
                         </div>
-
-                        <div class="space-y-4">
-                            <div class="p-4 bg-[#0A0A0A] rounded-lg">
-                                <p class="text-xs text-[#A0A0A0] mb-1">Account Name</p>
-                                <div class="flex items-center justify-between">
-                                    <p class="text-white font-medium">{{ $bankDetails['account_name'] }}</p>
-                                    <button onclick="navigator.clipboard.writeText('{{ $bankDetails['account_name'] }}')" class="p-1.5 hover:bg-[#D4AF37]/20 rounded transition-colors" title="Copy">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="p-4 bg-[#0A0A0A] rounded-lg">
-                                <p class="text-xs text-[#A0A0A0] mb-1">Account Number</p>
-                                <div class="flex items-center justify-between">
-                                    <p class="text-white font-medium font-mono">{{ $bankDetails['account_number'] }}</p>
-                                    <button onclick="navigator.clipboard.writeText('{{ str_replace('*', '', $bankDetails['account_number']) }}')" class="p-1.5 hover:bg-[#D4AF37]/20 rounded transition-colors" title="Copy">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="p-4 bg-[#0A0A0A] rounded-lg">
-                                <p class="text-xs text-[#A0A0A0] mb-1">Routing Number (ACH/Domestic Wire)</p>
-                                <div class="flex items-center justify-between">
-                                    <p class="text-white font-medium font-mono">{{ $bankDetails['routing_number'] }}</p>
-                                    <button onclick="navigator.clipboard.writeText('{{ $bankDetails['routing_number'] }}')" class="p-1.5 hover:bg-[#D4AF37]/20 rounded transition-colors" title="Copy">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="p-4 bg-[#0A0A0A] rounded-lg">
-                                <p class="text-xs text-[#A0A0A0] mb-1">SWIFT/BIC (International Wire)</p>
-                                <div class="flex items-center justify-between">
-                                    <p class="text-white font-medium font-mono">{{ $bankDetails['swift'] }}</p>
-                                    <button onclick="navigator.clipboard.writeText('{{ $bankDetails['swift'] }}')" class="p-1.5 hover:bg-[#D4AF37]/20 rounded transition-colors" title="Copy">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="p-4 bg-[#0A0A0A] rounded-lg">
-                                <p class="text-xs text-[#A0A0A0] mb-1">IBAN (SEPA Transfers)</p>
-                                <div class="flex items-center justify-between">
-                                    <p class="text-white font-medium font-mono text-sm">{{ $bankDetails['iban'] }}</p>
-                                    <button onclick="navigator.clipboard.writeText('{{ $bankDetails['iban'] }}')" class="p-1.5 hover:bg-[#D4AF37]/20 rounded transition-colors" title="Copy">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="p-4 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-lg">
-                                <p class="text-xs text-[#D4AF37] mb-1">Reference/Memo (Required)</p>
-                                <div class="flex items-center justify-between">
-                                    <p class="text-[#D4AF37] font-bold font-mono">{{ $bankDetails['reference'] }}</p>
-                                    <button onclick="navigator.clipboard.writeText('{{ $bankDetails['reference'] }}')" class="p-1.5 hover:bg-[#D4AF37]/20 rounded transition-colors" title="Copy">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                                    </button>
-                                </div>
-                                <p class="text-xs text-[#A0A0A0] mt-2">⚠️ Include this reference in your transfer memo</p>
-                            </div>
+                        <div class="text-right">
+                            <p class="text-sm text-[#A0A0A0] mb-1">Processing Time</p>
+                            <p class="text-white">1-3 Business Days</p>
                         </div>
-                    </div>
-
-                    {{-- Bank Address --}}
-                    <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6">
-                        <h4 class="text-white font-medium mb-3">Bank Address</h4>
-                        <p class="text-sm text-[#A0A0A0]">{{ $bankDetails['bank_name'] }}</p>
-                        <p class="text-sm text-[#A0A0A0]">{{ $bankDetails['bank_address'] }}</p>
                     </div>
                 </div>
 
-                {{-- Instructions & Summary --}}
-                <div>
-                    {{-- Deposit Summary --}}
-                    <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 mb-6">
-                        <h3 class="text-lg font-semibold text-white mb-6" style="font-family: 'Playfair Display';">Deposit Summary</h3>
-                        
-                        <div class="space-y-4 mb-6">
-                            <div class="flex justify-between text-sm">
-                                <span class="text-[#A0A0A0]">Amount to Deposit</span>
-                                <span class="text-white font-semibold">${{ number_format($amount, 2) }}</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-[#A0A0A0]">Processing Fee</span>
-                                <span class="text-green-500">$0.00</span>
-                            </div>
-                            <div class="border-t border-[#D4AF37]/20 pt-4">
-                                <div class="flex justify-between">
-                                    <span class="text-white font-medium">Total to Send</span>
-                                    <span class="text-[#D4AF37] font-bold text-lg">${{ number_format($amount, 2) }}</span>
+                {{-- Reference Number --}}
+                <div class="bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-xl p-6 mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-[#D4AF37] mb-1">Your Reference Number (Required)</p>
+                            <p class="text-2xl font-bold text-[#D4AF37] font-mono">{{ $reference }}</p>
+                            <p class="text-xs text-[#A0A0A0] mt-2">⚠️ Include this in your transfer memo/description</p>
+                        </div>
+                        <button onclick="navigator.clipboard.writeText('{{ $reference }}')" class="px-4 py-2 bg-[#D4AF37] text-[#0A0A0A] rounded-lg font-medium hover:bg-[#B8860B] transition-colors">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Bank Account Selection --}}
+                <div x-data="{ selectedId: {{ $bankAccounts->first()->id ?? 'null' }} }" class="space-y-4">
+                    
+                    <p class="text-sm text-[#A0A0A0] mb-3">Select Bank Account</p>
+                    
+                    @foreach($bankAccounts as $account)
+                        <button @click="selectedId = {{ $account->id }}" 
+                            :class="selectedId === {{ $account->id }} ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#D4AF37]/20 hover:border-[#D4AF37]/50'"
+                            class="w-full p-6 rounded-xl border transition-all text-left">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-[#D4AF37]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <h3 class="text-white font-semibold">{{ $account->bank_name }}</h3>
+                                        <span class="px-2 py-0.5 bg-[#0A0A0A] rounded text-xs text-[#A0A0A0]">{{ $account->currency }}</span>
+                                    </div>
+                                    <p class="text-sm text-[#A0A0A0] mb-1">{{ $account->account_name }}</p>
+                                    <code class="text-xs text-[#D4AF37] bg-[#0A0A0A] px-2 py-1 rounded">{{ $account->masked_account_number }}</code>
                                 </div>
                             </div>
-                        </div>
+                        </button>
 
-                        <div class="p-4 bg-[#0A0A0A] rounded-lg">
-                            <div class="flex items-center gap-2 mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
-                                <span class="text-sm text-white font-medium">Processing Time</span>
+                        {{-- Bank Details (shown when selected) --}}
+                        <div x-show="selectedId === {{ $account->id }}" x-transition class="p-6 bg-[#141414] border border-[#D4AF37]/20 rounded-xl">
+                            <h4 class="text-white font-medium mb-4 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                                Bank Transfer Details
+                            </h4>
+                            
+                            <div class="space-y-4">
+                                <div class="p-4 bg-[#0A0A0A] rounded-lg">
+                                    <p class="text-xs text-[#A0A0A0] mb-1">Account Name</p>
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-white font-medium">{{ $account->account_name }}</p>
+                                        <button onclick="navigator.clipboard.writeText('{{ $account->account_name }}')" class="p-1.5 hover:bg-[#D4AF37]/20 rounded transition-colors" title="Copy">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="p-4 bg-[#0A0A0A] rounded-lg">
+                                    <p class="text-xs text-[#A0A0A0] mb-1">Account Number</p>
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-white font-medium font-mono">{{ $account->masked_account_number }}</p>
+                                        <button onclick="navigator.clipboard.writeText('{{ $account->account_number }}')" class="p-1.5 hover:bg-[#D4AF37]/20 rounded transition-colors" title="Copy">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                @if($account->routing_number)
+                                    <div class="p-4 bg-[#0A0A0A] rounded-lg">
+                                        <p class="text-xs text-[#A0A0A0] mb-1">Routing Number (ACH/Domestic Wire)</p>
+                                        <div class="flex items-center justify-between">
+                                            <p class="text-white font-medium font-mono">{{ $account->routing_number }}</p>
+                                            <button onclick="navigator.clipboard.writeText('{{ $account->routing_number }}')" class="p-1.5 hover:bg-[#D4AF37]/20 rounded transition-colors" title="Copy">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if($account->swift_code)
+                                    <div class="p-4 bg-[#0A0A0A] rounded-lg">
+                                        <p class="text-xs text-[#A0A0A0] mb-1">SWIFT/BIC (International Wire)</p>
+                                        <div class="flex items-center justify-between">
+                                            <p class="text-white font-medium font-mono">{{ $account->swift_code }}</p>
+                                            <button onclick="navigator.clipboard.writeText('{{ $account->swift_code }}')" class="p-1.5 hover:bg-[#D4AF37]/20 rounded transition-colors" title="Copy">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if($account->iban)
+                                    <div class="p-4 bg-[#0A0A0A] rounded-lg">
+                                        <p class="text-xs text-[#A0A0A0] mb-1">IBAN (SEPA Transfers)</p>
+                                        <div class="flex items-center justify-between">
+                                            <p class="text-white font-medium font-mono text-sm">{{ $account->iban }}</p>
+                                            <button onclick="navigator.clipboard.writeText('{{ $account->iban }}')" class="p-1.5 hover:bg-[#D4AF37]/20 rounded transition-colors" title="Copy">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if($account->bank_address)
+                                    <div class="p-4 bg-[#0A0A0A] rounded-lg">
+                                        <p class="text-xs text-[#A0A0A0] mb-1">Bank Address</p>
+                                        <p class="text-white text-sm">{{ $account->bank_name }}</p>
+                                        <p class="text-[#A0A0A0] text-sm">{{ $account->bank_address }}</p>
+                                    </div>
+                                @endif
+
+                                @if($account->instructions)
+                                    <div class="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                                        <p class="text-xs text-yellow-500 mb-1">Special Instructions</p>
+                                        <p class="text-white text-sm">{{ $account->instructions }}</p>
+                                    </div>
+                                @endif
                             </div>
-                            <ul class="text-xs text-[#A0A0A0] space-y-1">
-                                <li>• Domestic Wire (US): 1-2 business days</li>
-                                <li>• International Wire: 2-3 business days</li>
-                                <li>• ACH Transfer: 1-3 business days</li>
-                                <li>• SEPA Transfer: 1-2 business days</li>
-                            </ul>
                         </div>
-                    </div>
+                    @endforeach
 
                     {{-- Instructions --}}
-                    <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 mb-6">
+                    <div class="mt-6 p-6 bg-[#141414] border border-[#D4AF37]/20 rounded-xl">
                         <h4 class="text-white font-medium mb-4 flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
                             Important Instructions
@@ -166,11 +177,11 @@
                         <ul class="space-y-3 text-sm text-[#A0A0A0]">
                             <li class="flex items-start gap-2">
                                 <span class="text-[#D4AF37] mt-0.5">1.</span>
-                                <span>Include the exact reference number in your transfer memo/description</span>
+                                <span>Include the exact reference number <strong class="text-white">{{ $reference }}</strong> in your transfer memo/description</span>
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="text-[#D4AF37] mt-0.5">2.</span>
-                                <span>Send the exact amount specified. Partial payments may be delayed</span>
+                                <span>Send the exact amount of <strong class="text-white">${{ number_format($amount, 2) }}</strong>. Partial payments may be delayed</span>
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="text-[#D4AF37] mt-0.5">3.</span>
@@ -183,8 +194,51 @@
                         </ul>
                     </div>
 
+                    {{-- Processing Times --}}
+                    <div class="mt-6 p-6 bg-[#141414] border border-[#D4AF37]/20 rounded-xl">
+                        <h4 class="text-white font-medium mb-4">Processing Times</h4>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M12 2v20M2 12h20"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium text-sm">Domestic Wire (US)</p>
+                                    <p class="text-xs text-[#A0A0A0]">1-2 business days</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium text-sm">International Wire</p>
+                                    <p class="text-xs text-[#A0A0A0]">2-3 business days</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium text-sm">ACH Transfer</p>
+                                    <p class="text-xs text-[#A0A0A0]">1-3 business days</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium text-sm">SEPA Transfer</p>
+                                    <p class="text-xs text-[#A0A0A0]">1-2 business days</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- Action Buttons --}}
-                    <div class="flex gap-4">
+                    <div class="flex gap-4 mt-8">
                         <a href="{{ route('wallet.index') }}" class="flex-1 py-4 border border-[#D4AF37]/30 rounded-xl text-[#D4AF37] text-center hover:bg-[#D4AF37]/10 transition-colors">
                             I'll Send Later
                         </a>

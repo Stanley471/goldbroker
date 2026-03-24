@@ -26,6 +26,7 @@
                 <a href="{{ route('admin.logs') }}" class="px-3 py-2 text-sm {{ request()->routeIs('admin.logs') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Logs</a>
                 <a href="{{ route('admin.products.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('admin.products*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Products</a>
                 <a href="{{ route('admin.crypto-wallets.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('admin.crypto-wallets*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Crypto Wallets</a>
+                <a href="{{ route('admin.bank-accounts.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('admin.bank-accounts*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Bank Accounts</a>
             </div>
 
             <div class="flex items-center gap-3">
@@ -57,6 +58,7 @@
                 <a href="{{ route('admin.logs') }}" class="px-4 py-3 text-sm {{ request()->routeIs('admin.logs') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Logs</a>
                 <a href="{{ route('admin.products.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('admin.products*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Products</a>
                 <a href="{{ route('admin.crypto-wallets.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('admin.crypto-wallets*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Crypto Wallets</a>
+                <a href="{{ route('admin.bank-accounts.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('admin.bank-accounts*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Bank Accounts</a>
                 <div class="border-t border-[#D4AF37]/10 mt-2 pt-2 flex items-center justify-between px-4">
                     <span class="text-sm text-[#A0A0A0]">{{ auth()->user()->first_name }}</span>
                     <form method="POST" action="{{ route('logout') }}">

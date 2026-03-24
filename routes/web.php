@@ -11,6 +11,7 @@ use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\CryptoWalletController;
+use App\Http\Controllers\Admin\BankAccountController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
 
@@ -91,5 +92,14 @@ Route::delete('/products/{product}', [AdminProductController::class, 'destroy'])
     Route::put('/crypto-wallets/{cryptoWallet}', [CryptoWalletController::class, 'update'])->name('crypto-wallets.update');
     Route::delete('/crypto-wallets/{cryptoWallet}', [CryptoWalletController::class, 'destroy'])->name('crypto-wallets.destroy');
     Route::patch('/crypto-wallets/{cryptoWallet}/toggle', [CryptoWalletController::class, 'toggleActive'])->name('crypto-wallets.toggle');
+    
+    // Bank Account Management
+    Route::get('/bank-accounts', [BankAccountController::class, 'index'])->name('bank-accounts.index');
+    Route::get('/bank-accounts/create', [BankAccountController::class, 'create'])->name('bank-accounts.create');
+    Route::post('/bank-accounts', [BankAccountController::class, 'store'])->name('bank-accounts.store');
+    Route::get('/bank-accounts/{bankAccount}/edit', [BankAccountController::class, 'edit'])->name('bank-accounts.edit');
+    Route::put('/bank-accounts/{bankAccount}', [BankAccountController::class, 'update'])->name('bank-accounts.update');
+    Route::delete('/bank-accounts/{bankAccount}', [BankAccountController::class, 'destroy'])->name('bank-accounts.destroy');
+    Route::patch('/bank-accounts/{bankAccount}/toggle', [BankAccountController::class, 'toggleActive'])->name('bank-accounts.toggle');
 });
 require __DIR__.'/auth.php';
