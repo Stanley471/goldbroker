@@ -6,6 +6,7 @@ use App\Services\WalletService;
 use App\Services\UserHoldingService;
 
 use App\Models\User;
+use App\Models\Transaction;
 use App\Http\Requests\DepositRequest;
 use Illuminate\Http\Request;
 
@@ -62,13 +63,9 @@ class WalletController extends Controller
         $amount = $request->amount;
         $paymentMethod = $request->payment_method;
 
-        // For demonstration, we'll simulate different payment flows
-        // In production, integrate with Stripe, Coinbase Commerce, etc.
-        
         switch ($paymentMethod) {
             case 'card':
-                // In production: redirect to Stripe/PayPal
-                // For now, simulate instant deposit
+                // Credit card deposits are instant
                 $this->walletService->creditUSD(
                     $user,
                     $amount,
@@ -77,16 +74,66 @@ class WalletController extends Controller
                 return redirect()->route('wallet.index')->with('success', 'Deposit of $' . number_format($amount, 2) . ' completed successfully!');
                 
             case 'crypto':
-                // In production: generate crypto invoice
+                // Check if this is a confirmation that crypto was sent
+                if ($request->has('confirm_payment')) {
+                    // Generate unique reference
+                    $reference = 'DEP-' . $user->id . '-' . strtoupper(substr(md5(uniqid()), 0, 8));
+                    
+                    // Create pending transaction
+                    Transaction::create([
+                        'user_id' => $user->id,
+                        'type' => 'deposit',
+                        'amount' => $amount,
+                        'currency' => 'USD',
+                        'description' => 'Cryptocurrency deposit (awaiting confirmation)',
+                        'status' => 'pending',
+                        'reference_number' => $reference,
+                        'payment_method' => 'crypto',
+                    ]);
+                    
+                    return redirect()->route('wallet.deposit.pending', ['reference' => $reference]);
+                }
+                
+                // Show crypto payment page
                 return redirect()->route('wallet.deposit.crypto', ['amount' => $amount]);
                 
             case 'bank':
-                // In production: show bank transfer details
+                // Check if this is a confirmation that bank transfer was sent
+                if ($request->has('confirm_payment')) {
+                    // Generate unique reference
+                    $reference = 'DEP-' . $user->id . '-' . strtoupper(substr(md5(uniqid()), 0, 8));
+                    
+                    // Create pending transaction
+                    Transaction::create([
+                        'user_id' => $user->id,
+                        'type' => 'deposit',
+                        'amount' => $amount,
+                        'currency' => 'USD',
+                        'description' => 'Bank transfer deposit (awaiting confirmation)',
+                        'status' => 'pending',
+                        'reference_number' => $reference,
+                        'payment_method' => 'bank_transfer',
+                    ]);
+                    
+                    return redirect()->route('wallet.deposit.pending', ['reference' => $reference]);
+                }
+                
+                // Show bank transfer page
                 return redirect()->route('wallet.deposit.bank', ['amount' => $amount]);
                 
             default:
                 return back()->with('error', 'Invalid payment method');
         }
+    }
+
+    public function pendingDeposit(Request $request)
+    {
+        $reference = $request->get('reference');
+        $transaction = Transaction::where('reference_number', $reference)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+        
+        return view('wallet.deposit-pending', compact('transaction'));
     }
 
     public function depositCrypto(Request $request)

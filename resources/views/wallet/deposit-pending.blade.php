@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Pending - GoldVault</title>
+    <title>Deposit Pending - GoldVault</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#0A0A0A] text-white" style="font-family: 'Inter', sans-serif;">
@@ -22,15 +22,14 @@
                         <path d="M12 6v6l4 2"/>
                     </svg>
                 </div>
-                <h1 class="text-4xl font-bold text-white mb-2" style="font-family: 'Playfair Display';">Order Awaiting Confirmation</h1>
-                <p class="text-[#A0A0A0] max-w-lg mx-auto">Your order has been placed and is now pending payment confirmation. We'll notify you once your payment is received and processed.</p>
+                <h1 class="text-4xl font-bold text-white mb-2" style="font-family: 'Playfair Display';">Payment Awaiting Confirmation</h1>
+                <p class="text-[#A0A0A0] max-w-lg mx-auto">Your deposit has been recorded and is now pending confirmation from our team. We'll notify you once the funds are received.</p>
             </div>
 
             <div class="max-w-2xl mx-auto">
-                @if($transaction)
                 {{-- Transaction Details --}}
                 <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 mb-6">
-                    <h3 class="text-lg font-semibold text-white mb-4">Order Details</h3>
+                    <h3 class="text-lg font-semibold text-white mb-4">Transaction Details</h3>
                     
                     <div class="space-y-4">
                         <div class="flex justify-between items-center p-3 bg-[#0A0A0A] rounded-lg">
@@ -39,7 +38,7 @@
                         </div>
                         
                         <div class="flex justify-between items-center p-3 bg-[#0A0A0A] rounded-lg">
-                            <span class="text-[#A0A0A0]">Total Amount</span>
+                            <span class="text-[#A0A0A0]">Amount</span>
                             <span class="text-white font-semibold">${{ number_format($transaction->amount, 2) }}</span>
                         </div>
                         
@@ -58,12 +57,12 @@
                             <span class="text-[#A0A0A0]">Status</span>
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-500/20 text-yellow-400 text-sm rounded-full">
                                 <span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
-                                Pending Payment
+                                Pending
                             </span>
                         </div>
                         
                         <div class="flex justify-between items-center p-3 bg-[#0A0A0A] rounded-lg">
-                            <span class="text-[#A0A0A0]">Order Date</span>
+                            <span class="text-[#A0A0A0]">Submitted</span>
                             <span class="text-white">{{ $transaction->created_at->format('M j, Y g:i A') }}</span>
                         </div>
                     </div>
@@ -96,8 +95,8 @@
                                     <span class="text-[#D4AF37] text-sm font-bold">2</span>
                                 </div>
                                 <div>
-                                    <p class="text-white font-medium">Payment Verification</p>
-                                    <p class="text-sm text-[#A0A0A0]">Our team will verify your payment within 1-2 hours.</p>
+                                    <p class="text-white font-medium">Admin Verification</p>
+                                    <p class="text-sm text-[#A0A0A0]">Our team will verify and approve your deposit within 1-2 hours.</p>
                                 </div>
                             </div>
                         @else
@@ -115,8 +114,8 @@
                                     <span class="text-[#D4AF37] text-sm font-bold">2</span>
                                 </div>
                                 <div>
-                                    <p class="text-white font-medium">Payment Verification</p>
-                                    <p class="text-sm text-[#A0A0A0]">Our team will verify your payment upon receipt.</p>
+                                    <p class="text-white font-medium">Admin Verification</p>
+                                    <p class="text-sm text-[#A0A0A0]">Our team will verify and approve your deposit upon receipt.</p>
                                 </div>
                             </div>
                         @endif
@@ -125,8 +124,8 @@
                                 <span class="text-green-500 text-sm font-bold">✓</span>
                             </div>
                             <div>
-                                <p class="text-white font-medium">Order Completed</p>
-                                <p class="text-sm text-[#A0A0A0]">Once confirmed, your order will be processed and products added to your vault.</p>
+                                <p class="text-white font-medium">Funds Credited</p>
+                                <p class="text-sm text-[#A0A0A0]">Once confirmed, the funds will be added to your wallet balance.</p>
                             </div>
                         </div>
                     </div>
@@ -142,24 +141,18 @@
                         </svg>
                         <div>
                             <p class="text-yellow-500 font-medium mb-1">Keep Your Reference Number</p>
-                            <p class="text-sm text-[#A0A0A0]">Save your reference number <strong class="text-white">{{ $transaction->reference_number }}</strong> for your records. You'll need it if you contact support about this order.</p>
+                            <p class="text-sm text-[#A0A0A0]">Save your reference number <strong class="text-white">{{ $transaction->reference_number }}</strong> for your records. You'll need it if you contact support about this deposit.</p>
                         </div>
                     </div>
                 </div>
-                @else
-                {{-- Generic Pending Message --}}
-                <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 mb-6 text-center">
-                    <p class="text-[#A0A0A0]">Your order is being processed. Please check your email for payment instructions.</p>
-                </div>
-                @endif
 
                 {{-- Action Buttons --}}
                 <div class="flex gap-4">
-                    <a href="{{ route('dashboard') }}" class="flex-1 btn-primary justify-center py-4 text-center">
-                        Go to Dashboard
+                    <a href="{{ route('wallet.index') }}" class="flex-1 btn-primary justify-center py-4 text-center">
+                        View Wallet
                     </a>
-                    <a href="{{ route('products.index') }}" class="flex-1 py-4 border border-[#D4AF37]/30 rounded-xl text-[#D4AF37] text-center hover:bg-[#D4AF37]/10 transition-colors">
-                        Continue Shopping
+                    <a href="{{ route('dashboard') }}" class="flex-1 py-4 border border-[#D4AF37]/30 rounded-xl text-[#D4AF37] text-center hover:bg-[#D4AF37]/10 transition-colors">
+                        Go to Dashboard
                     </a>
                 </div>
             </div>

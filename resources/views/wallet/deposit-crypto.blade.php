@@ -135,6 +135,7 @@
                             @csrf
                             <input type="hidden" name="amount" value="{{ $amount }}">
                             <input type="hidden" name="payment_method" value="crypto">
+                            <input type="hidden" name="confirm_payment" value="1">
                             <button type="submit" class="w-full btn-primary justify-center py-4" onclick="return confirm('Have you sent the exact crypto amount to the address shown?');">
                                 I've Sent the Payment
                             </button>

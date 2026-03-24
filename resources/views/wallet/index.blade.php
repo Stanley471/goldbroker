@@ -214,6 +214,24 @@
 
                 {{-- Transactions Tab --}}
                 <div x-show="tab === 'transactions'" style="display: none;">
+                    {{-- Pending Transactions Alert --}}
+                    @php
+                        $pendingTransactions = $transactions->where('status', 'pending');
+                    @endphp
+                    @if($pendingTransactions->count() > 0)
+                        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-6">
+                            <div class="flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 mt-0.5">
+                                    <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                                </svg>
+                                <div>
+                                    <p class="text-yellow-500 font-medium mb-1">Pending Transactions</p>
+                                    <p class="text-sm text-[#A0A0A0]">You have {{ $pendingTransactions->count() }} transaction(s) awaiting confirmation.</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full">
@@ -221,8 +239,9 @@
                                     <tr class="border-b border-[#D4AF37]/20">
                                         <th class="text-left py-4 px-6 text-[#A0A0A0] font-medium text-sm">Type</th>
                                         <th class="text-right py-4 px-6 text-[#A0A0A0] font-medium text-sm">Amount</th>
-                                        <th class="text-right py-4 px-6 text-[#A0A0A0] font-medium text-sm">Currency</th>
+                                        <th class="text-left py-4 px-6 text-[#A0A0A0] font-medium text-sm">Status</th>
                                         <th class="text-left py-4 px-6 text-[#A0A0A0] font-medium text-sm">Description</th>
+                                        <th class="text-left py-4 px-6 text-[#A0A0A0] font-medium text-sm">Reference</th>
                                         <th class="text-right py-4 px-6 text-[#A0A0A0] font-medium text-sm">Date</th>
                                     </tr>
                                 </thead>
@@ -231,18 +250,38 @@
                                         <tr class="border-b border-[#D4AF37]/10 hover:bg-[#D4AF37]/5 transition-colors">
                                             <td class="py-4 px-6">
                                                 <span class="px-2 py-1 text-xs rounded-full
-                                                    @if(in_array($tx->type, ['deposit', 'buy'])) bg-green-500/20 text-green-400
+                                                    @if(in_array($tx->type, ['deposit', 'buy'])) bg-blue-500/20 text-blue-400
                                                     @else bg-red-500/20 text-red-400 @endif">
                                                     {{ ucfirst($tx->type) }}
                                                 </span>
                                             </td>
-                                            <td class="text-right py-4 px-6 text-white font-semibold">{{ number_format($tx->amount, 6) }}</td>
-                                            <td class="text-right py-4 px-6 text-[#A0A0A0]">{{ $tx->currency }}</td>
+                                            <td class="text-right py-4 px-6 text-white font-semibold">${{ number_format($tx->amount, 2) }}</td>
+                                            <td class="py-4 px-6">
+                                                <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium
+                                                    @if($tx->status === 'pending') bg-yellow-500/20 text-yellow-400
+                                                    @elseif($tx->status === 'completed') bg-green-500/20 text-green-400
+                                                    @else bg-red-500/20 text-red-400
+                                                    @endif">
+                                                    <span class="w-1.5 h-1.5 rounded-full
+                                                        @if($tx->status === 'pending') bg-yellow-500 animate-pulse
+                                                        @elseif($tx->status === 'completed') bg-green-500
+                                                        @else bg-red-500
+                                                        @endif"></span>
+                                                    {{ ucfirst($tx->status) }}
+                                                </span>
+                                            </td>
                                             <td class="py-4 px-6 text-[#A0A0A0] text-sm">{{ $tx->description ?? '--' }}</td>
-                                            <td class="text-right py-4 px-6 text-[#666] text-sm">{{ $tx->created_at->diffForHumans() }}</td>
+                                            <td class="py-4 px-6">
+                                                @if($tx->reference_number)
+                                                    <code class="text-[#D4AF37] font-mono text-xs">{{ $tx->reference_number }}</code>
+                                                @else
+                                                    <span class="text-[#666]">--</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-right py-4 px-6 text-[#666] text-sm">{{ $tx->created_at->format('M j, Y') }}</td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="5" class="text-center py-8 text-[#666]">No transactions yet.</td></tr>
+                                        <tr><td colspan="6" class="text-center py-8 text-[#666]">No transactions yet.</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>

@@ -246,7 +246,8 @@
                             @csrf
                             <input type="hidden" name="amount" value="{{ $amount }}">
                             <input type="hidden" name="payment_method" value="bank">
-                            <button type="submit" class="w-full btn-primary justify-center py-4">
+                            <input type="hidden" name="confirm_payment" value="1">
+                            <button type="submit" class="w-full btn-primary justify-center py-4" onclick="return confirm('Have you initiated the bank transfer with the reference number?');">
                                 I've Sent the Transfer
                             </button>
                         </form>

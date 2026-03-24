@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vault;
+use App\Models\Transaction;
 use App\Services\CartService;
 use App\Services\GoldPriceService;
 use App\Services\WalletService;
@@ -200,9 +201,18 @@ class CheckoutController extends Controller
         return back()->with('error', 'Invalid payment method.');
     }
 
-    public function pending()
+    public function pending(Request $request)
     {
-        return view('checkout.pending');
+        $reference = $request->get('reference');
+        $transaction = null;
+        
+        if ($reference) {
+            $transaction = Transaction::where('reference_number', $reference)
+                ->where('user_id', auth()->id())
+                ->first();
+        }
+        
+        return view('checkout.pending', compact('transaction', 'reference'));
     }
 
     public function cryptoPayment(Request $request)
@@ -247,11 +257,15 @@ class CheckoutController extends Controller
 
         /** @var \App\Models\User $user */
         $user = auth()->user();
+        $paymentMethod = $pendingOrder['payment_method'];
 
         try {
-            \DB::transaction(function () use ($user, $pendingOrder) {
-                $cart = $this->cartService->getOrCreateCart($user);
-                
+            // Generate unique reference for this order
+            $reference = 'ORD-' . $user->id . '-' . strtoupper(substr(md5(uniqid()), 0, 8));
+            
+            // Create orders first (but don't create holdings yet - wait for payment confirmation)
+            $orders = [];
+            \DB::transaction(function () use ($user, $pendingOrder, $reference, $paymentMethod, &$orders) {
                 foreach ($pendingOrder['items'] as $itemData) {
                     $product = \App\Models\Product::find($itemData['product_id']);
                     if (!$product) continue;
@@ -260,35 +274,39 @@ class CheckoutController extends Controller
                     $itemShippingFee = $pendingOrder['delivery_method'] === 'ship' ? $itemTotal * 0.005 : 0;
                     $itemPriceWithShipping = $itemTotal + $itemShippingFee;
 
-                    // Decrement stock
+                    // Decrement stock (reserve the items)
                     $product->decrement('stock', $itemData['quantity']);
 
-                    // Create order
+                    // Create order with pending_payment status
                     $order = \App\Models\Order::create([
                         'user_id' => $user->id,
                         'order_type' => 'buy',
                         'gold_grams' => $product->weight_grams * $itemData['quantity'],
                         'price_per_gram_usd' => $itemData['price'] / $product->weight_grams,
                         'total_usd' => $itemPriceWithShipping,
-                        'status' => 'pending',
-                        'reference_number' => strtoupper(\Str::random(10)),
+                        'status' => 'pending_payment',
+                        'reference_number' => $reference,
                         'delivery_method' => $pendingOrder['delivery_method'],
                         'vault_id' => in_array($pendingOrder['delivery_method'], ['vault', 'pickup']) ? $pendingOrder['vault_id'] : null,
                         'shipping_address' => $pendingOrder['delivery_method'] === 'ship' ? $pendingOrder['shipping_address'] : null,
                         'shipping_fee' => $itemShippingFee,
                         'product_id' => $product->id,
                     ]);
+                    
+                    $orders[] = $order;
 
-                    // Create user holding
-                    $this->userHoldingService->createHolding(
-                        user: $user,
-                        product: $product,
-                        quantity: $itemData['quantity'],
-                        purchasePricePerUnit: $itemData['price'],
-                        order: $order,
-                        vaultId: in_array($pendingOrder['delivery_method'], ['vault', 'pickup']) ? $pendingOrder['vault_id'] : null,
-                        storageLocation: $pendingOrder['delivery_method'] === 'ship' ? 'personal' : 'vault'
-                    );
+                    // Create transaction record for the purchase (pending status)
+                    Transaction::create([
+                        'user_id' => $user->id,
+                        'type' => 'buy',
+                        'amount' => $itemPriceWithShipping,
+                        'currency' => 'USD',
+                        'description' => 'Purchase: ' . $product->name . ' (awaiting payment confirmation)',
+                        'order_id' => $order->id,
+                        'status' => 'pending',
+                        'reference_number' => $reference,
+                        'payment_method' => $paymentMethod,
+                    ]);
                 }
 
                 // Clear cart
@@ -298,7 +316,8 @@ class CheckoutController extends Controller
             // Clear pending order from session
             session()->forget('pending_order');
 
-            return redirect()->route('dashboard')->with('success', 'Order placed successfully! Your payment is being processed. Your products will be added to your vault once confirmed.');
+            // Redirect to pending payment page
+            return redirect()->route('checkout.pending', ['reference' => $reference]);
 
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

@@ -16,6 +16,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\KycController;
 use App\Http\Controllers\Admin\KycController as AdminKycController;
+use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
 
 Route::get('/', function () {
     $goldPrice = app(\App\Services\GoldPriceService::class)->getCurrentPrice();
@@ -47,6 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/wallet/deposit', [WalletController::class, 'processDeposit'])->name('wallet.deposit.process');
     Route::get('/wallet/deposit/crypto', [WalletController::class, 'depositCrypto'])->name('wallet.deposit.crypto');
     Route::get('/wallet/deposit/bank', [WalletController::class, 'depositBank'])->name('wallet.deposit.bank');
+    Route::get('/wallet/deposit/pending', [WalletController::class, 'pendingDeposit'])->name('wallet.deposit.pending');
     Route::post('/orders/buy', [OrderController::class, 'buy'])->name('orders.buy')->middleware('throttle:10,1');
     Route::post('/orders/sell', [OrderController::class, 'sell'])->name('orders.sell')->middleware('throttle:10,1');
     Route::get('/ira', [IraController::class, 'index'])->name('ira.index');
@@ -125,5 +127,11 @@ Route::delete('/products/{product}', [AdminProductController::class, 'destroy'])
     Route::get('/kyc/{kyc}/document/{type}', [AdminKycController::class, 'document'])->name('kyc.document');
     Route::patch('/kyc/{kyc}/approve', [AdminKycController::class, 'approve'])->name('kyc.approve');
     Route::patch('/kyc/{kyc}/reject', [AdminKycController::class, 'reject'])->name('kyc.reject');
+    
+    // Transaction Management
+    Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/transactions/{transaction}', [AdminTransactionController::class, 'show'])->name('transactions.show');
+    Route::patch('/transactions/{transaction}/confirm', [AdminTransactionController::class, 'confirm'])->name('transactions.confirm');
+    Route::patch('/transactions/{transaction}/reject', [AdminTransactionController::class, 'reject'])->name('transactions.reject');
 });
 require __DIR__.'/auth.php';
