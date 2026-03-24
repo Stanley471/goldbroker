@@ -44,9 +44,9 @@
                 {{-- Stats --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-2xl p-6">
-                        <p class="text-xs text-[#A0A0A0] uppercase tracking-wider mb-3">Gold Balance</p>
-                        <p class="text-3xl font-bold text-[#D4AF37]">{{ number_format($iraAccount->gold_balance_grams, 6) }}g</p>
-                        <p class="text-xs text-[#A0A0A0] mt-1">Physical gold in grams</p>
+                        <p class="text-xs text-[#A0A0A0] uppercase tracking-wider mb-3">Account Balance</p>
+                        <p class="text-3xl font-bold text-[#D4AF37]">${{ number_format($iraAccount->balance_usd, 2) }}</p>
+                        <p class="text-xs text-[#A0A0A0] mt-1">Cash balance in USD</p>
                     </div>
                     <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-2xl p-6">
                         <p class="text-xs text-[#A0A0A0] uppercase tracking-wider mb-3">Account Type</p>
@@ -57,7 +57,7 @@
 
                 {{-- Transfer Form --}}
                 <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-2xl p-6 md:p-8" x-data="{ direction: 'to_ira' }">
-                    <h2 class="text-lg font-semibold text-white mb-6" style="font-family: 'Playfair Display';">Transfer Gold</h2>
+                    <h2 class="text-lg font-semibold text-white mb-6" style="font-family: 'Playfair Display';">Transfer Funds</h2>
 
                     <form method="POST" action="{{ route('ira.transfer', $iraAccount->id) }}" class="space-y-6">
                         @csrf
@@ -71,7 +71,7 @@
                                     <div class="w-full p-4 bg-[#0A0A0A] border border-[#D4AF37]/20 rounded-xl text-center peer-checked:border-[#D4AF37] peer-checked:bg-[#D4AF37]/10 transition-all">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 text-[#D4AF37]"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                                         <p class="text-sm font-medium text-white">Wallet → IRA</p>
-                                        <p class="text-xs text-[#A0A0A0] mt-1">Move gold into IRA</p>
+                                        <p class="text-xs text-[#A0A0A0] mt-1">Deposit funds into IRA</p>
                                     </div>
                                 </label>
                                 <label class="relative cursor-pointer">
@@ -79,21 +79,21 @@
                                     <div class="w-full p-4 bg-[#0A0A0A] border border-[#D4AF37]/20 rounded-xl text-center peer-checked:border-[#D4AF37] peer-checked:bg-[#D4AF37]/10 transition-all">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 text-[#D4AF37]"><path d="M19 12H5"></path><path d="m12 5-7 7 7 7"></path></svg>
                                         <p class="text-sm font-medium text-white">IRA → Wallet</p>
-                                        <p class="text-xs text-[#A0A0A0] mt-1">Move gold out of IRA</p>
+                                        <p class="text-xs text-[#A0A0A0] mt-1">Withdraw funds from IRA</p>
                                     </div>
                                 </label>
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-sm text-[#A0A0A0] mb-2">Amount (grams)</label>
-                            <input type="number" name="grams" step="0.01" min="0.01" placeholder="Enter grams to transfer"
+                            <label class="block text-sm text-[#A0A0A0] mb-2">Amount (USD)</label>
+                            <input type="number" name="amount" step="0.01" min="1" placeholder="Enter amount to transfer"
                                 class="w-full bg-[#0A0A0A] border border-[#D4AF37]/30 rounded-xl px-4 py-3 text-white placeholder-[#666] focus:border-[#D4AF37] focus:outline-none transition-colors" />
-                            @error('grams') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                            @error('amount') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
                         <button type="submit" class="w-full btn-primary justify-center py-3">
-                            Transfer Gold
+                            Transfer Funds
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                         </button>
                     </form>

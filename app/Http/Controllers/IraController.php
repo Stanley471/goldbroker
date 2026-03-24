@@ -49,7 +49,7 @@ class IraController extends Controller
     public function transfer(Request $request, IraAccount $iraAccount)
     {
         $request->validate([
-            'grams' => ['required', 'numeric', 'min:0.01'],
+            'amount' => ['required', 'numeric', 'min:1'],
             'direction' => ['required', 'in:to_ira,from_ira'],
         ]);
 
@@ -58,9 +58,9 @@ class IraController extends Controller
 
         try {
             if ($request->direction === 'to_ira') {
-                $this->iraService->transferToIra($user, $iraAccount, $request->grams);
+                $this->iraService->transferToIra($user, $iraAccount, $request->amount);
             } else {
-                $this->iraService->transferFromIra($user, $iraAccount, $request->grams);
+                $this->iraService->transferFromIra($user, $iraAccount, $request->amount);
             }
             return back()->with('success', 'Transfer successful');
         } catch (\Exception $e) {

@@ -36,8 +36,8 @@
                     </div>
                 </div>
                 @if($goldPrice)
-                    <p class="text-3xl font-bold text-[#D4AF37]">${{ number_format($goldPrice->price_per_gram_usd, 2) }}</p>
-                    <p class="text-xs text-[#A0A0A0] mt-1">per gram · {{ $goldPrice->fetched_at->diffForHumans() }}</p>
+                    <p class="text-3xl font-bold text-[#D4AF37]">${{ number_format($goldPrice->price_per_oz_usd, 2) }}</p>
+                    <p class="text-xs text-[#A0A0A0] mt-1">per ounce · {{ $goldPrice->fetched_at->diffForHumans() }}</p>
                     @if($priceChange)
                         <div class="flex items-center gap-1 mt-2">
                             @if($priceChange['direction'] === 'up')
@@ -113,7 +113,11 @@
                                 <tr class="border-b border-[#D4AF37]/10 hover:bg-[#D4AF37]/5 transition-colors">
                                     <td class="py-3 px-4">
                                         <div class="flex items-center gap-3">
-                                            <span class="text-xl">{{ $group['product']->metal_type === 'gold' ? '🥇' : '🥈' }}</span>
+                                            <div class="w-10 h-10 rounded-lg flex items-center justify-center {{ $group['product']->metal_type === 'gold' ? 'bg-yellow-500/20' : 'bg-gray-500/20' }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="{{ $group['product']->metal_type === 'gold' ? 'text-yellow-500' : 'text-gray-400' }}">
+                                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                                </svg>
+                                            </div>
                                             <div>
                                                 <p class="text-white font-medium text-sm">{{ $group['product']->name }}</p>
                                                 <p class="text-xs text-[#666]">{{ number_format($group['product']->weight_grams, 1) }}g {{ $group['product']->metal_type }}</p>

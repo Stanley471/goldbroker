@@ -40,19 +40,20 @@
                         
                         {{-- Payment Method Cards --}}
                         <div class="grid sm:grid-cols-3 gap-4 mb-8">
-                            {{-- Credit Card --}}
-                            <button @click="method = 'card'" 
-                                :class="method === 'card' ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#D4AF37]/20 hover:border-[#D4AF37]/50'"
-                                class="p-6 rounded-xl border text-left transition-all">
-                                <div class="w-12 h-12 bg-[#D4AF37]/20 rounded-lg flex items-center justify-center mb-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                            {{-- Credit Card (Temporarily Disabled) --}}
+                            <div class="p-6 rounded-xl border border-[#D4AF37]/10 bg-[#0A0A0A]/50 cursor-not-allowed relative overflow-hidden">
+                                <div class="absolute inset-0 bg-[#0A0A0A]/60 flex items-center justify-center">
+                                    <span class="px-3 py-1 bg-red-500/20 text-red-400 text-xs font-medium rounded-full border border-red-500/30">Not Available</span>
                                 </div>
-                                <h3 class="text-white font-semibold mb-1">Credit Card</h3>
-                                <p class="text-xs text-[#A0A0A0]">Visa, Mastercard, Amex</p>
+                                <div class="w-12 h-12 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]/50"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                                </div>
+                                <h3 class="text-white/50 font-semibold mb-1">Credit Card</h3>
+                                <p class="text-xs text-[#A0A0A0]/50">Visa, Mastercard, Amex</p>
                                 <div class="mt-3 flex items-center gap-2">
-                                    <span class="text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded">Instant</span>
+                                    <span class="text-xs px-2 py-1 bg-[#D4AF37]/10 text-[#A0A0A0]/50 rounded">Temporarily Unavailable</span>
                                 </div>
-                            </button>
+                            </div>
 
                             {{-- Cryptocurrency --}}
                             <button @click="method = 'crypto'"
@@ -112,10 +113,10 @@
                             <div class="mb-6 p-4 bg-[#0A0A0A] rounded-lg">
                                 <div x-show="method === 'card'" x-transition>
                                     <div class="flex items-start gap-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37] mt-0.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500 mt-0.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
                                         <div>
-                                            <p class="text-sm text-white font-medium mb-1">Credit/Debit Card Payment</p>
-                                            <p class="text-xs text-[#A0A0A0]">Your funds will be available instantly. A 2.5% processing fee applies.</p>
+                                            <p class="text-sm text-red-400 font-medium mb-1">Credit Card Unavailable</p>
+                                            <p class="text-xs text-[#A0A0A0]">Credit card payments are temporarily unavailable. Please use Cryptocurrency or Bank Transfer.</p>
                                         </div>
                                     </div>
                                 </div>

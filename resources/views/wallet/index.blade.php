@@ -164,15 +164,18 @@
                         <h2 class="text-xl font-semibold text-white mb-6" style="font-family: 'Playfair Display';">Choose Payment Method</h2>
                         
                         <div class="grid sm:grid-cols-3 gap-4 mb-8">
-                            {{-- Credit Card --}}
-                            <a href="{{ route('wallet.deposit') }}?method=card" class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 hover:border-[#D4AF37] transition-all group">
-                                <div class="w-12 h-12 bg-[#D4AF37]/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-[#D4AF37]/30 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                            {{-- Credit Card (Disabled) --}}
+                            <div class="bg-[#141414] border border-[#D4AF37]/10 rounded-xl p-6 relative overflow-hidden cursor-not-allowed">
+                                <div class="absolute inset-0 bg-[#0A0A0A]/60 flex items-center justify-center">
+                                    <span class="px-3 py-1 bg-red-500/20 text-red-400 text-xs font-medium rounded-full border border-red-500/30">Not Available</span>
                                 </div>
-                                <h3 class="text-white font-semibold mb-1">Credit Card</h3>
-                                <p class="text-xs text-[#A0A0A0] mb-3">Visa, Mastercard, Amex</p>
-                                <span class="text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded">Instant</span>
-                            </a>
+                                <div class="w-12 h-12 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]/50"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                                </div>
+                                <h3 class="text-white/50 font-semibold mb-1">Credit Card</h3>
+                                <p class="text-xs text-[#A0A0A0]/50 mb-3">Visa, Mastercard, Amex</p>
+                                <span class="text-xs px-2 py-1 bg-red-500/10 text-red-400/50 rounded">Unavailable</span>
+                            </div>
 
                             {{-- Cryptocurrency --}}
                             <a href="{{ route('wallet.deposit') }}?method=crypto" class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 hover:border-[#D4AF37] transition-all group">
@@ -203,7 +206,7 @@
                                     <ul class="text-sm text-[#A0A0A0] space-y-1">
                                         <li>• Minimum deposit: $10.00</li>
                                         <li>• Maximum deposit: $100,000.00</li>
-                                        <li>• Credit card deposits are instant with a 2.5% fee</li>
+                                        <li>• <span class="text-red-400">Credit card temporarily unavailable</span></li>
                                         <li>• Crypto and Bank transfers have no fees</li>
                                     </ul>
                                 </div>

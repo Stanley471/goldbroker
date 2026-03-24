@@ -20,7 +20,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
                 <h1 class="text-3xl font-bold text-white" style="font-family: 'Playfair Display';">IRA Accounts</h1>
-                <p class="text-[#A0A0A0] text-sm mt-1">Tax-advantaged gold investment for your retirement</p>
+                <p class="text-[#A0A0A0] text-sm mt-1">Tax-advantaged retirement investment</p>
             </div>
             <a href="{{ route('ira.create') }}" class="btn-primary whitespace-nowrap">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
@@ -77,8 +77,8 @@
                         </div>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-3">
                             <div>
-                                <p class="text-xs text-[#A0A0A0]">Gold Balance</p>
-                                <p class="text-[#D4AF37] font-semibold">{{ number_format($ira->gold_balance_grams, 6) }}g</p>
+                                <p class="text-xs text-[#A0A0A0]">Balance</p>
+                                <p class="text-[#D4AF37] font-semibold">${{ number_format($ira->balance_usd, 2) }}</p>
                             </div>
                             <div>
                                 <p class="text-xs text-[#A0A0A0]">Tax Year</p>
@@ -108,7 +108,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><path d="M11 17h3v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a3.16 3.16 0 0 0 2-2h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a5 5 0 0 0-2-4V3a4 4 0 0 0-3.2 1.6l-.3.4H11a6 6 0 0 0-6 6v1a5 5 0 0 0 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1z"></path></svg>
                 </div>
                 <h3 class="text-white font-semibold mb-2">No IRA Accounts Yet</h3>
-                <p class="text-[#A0A0A0] text-sm mb-6">Open your first IRA account to start investing in gold for retirement.</p>
+                <p class="text-[#A0A0A0] text-sm mb-6">Open your first IRA account to start saving for retirement.</p>
                 <a href="{{ route('ira.create') }}" class="btn-primary">Open IRA Account</a>
             </div>
         @endforelse

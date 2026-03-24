@@ -137,7 +137,7 @@
                         </a>
                         <form method="POST" action="{{ route('checkout.confirm') }}" class="flex-1">
                             @csrf
-                            <button type="submit" class="w-full btn-primary justify-center py-4" onclick="return confirm('Have you sent the exact crypto amount to the address shown?');">
+                            <button type="submit" class="w-full btn-primary justify-center py-4">
                                 I've Sent the Payment
                             </button>
                         </form>

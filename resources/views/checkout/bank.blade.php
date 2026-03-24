@@ -223,7 +223,7 @@
                         </a>
                         <form method="POST" action="{{ route('checkout.confirm') }}" class="flex-1">
                             @csrf
-                            <button type="submit" class="w-full btn-primary justify-center py-4" onclick="return confirm('Have you initiated the bank transfer?');">
+                            <button type="submit" class="w-full btn-primary justify-center py-4">
                                 I've Sent the Transfer
                             </button>
                         </form>

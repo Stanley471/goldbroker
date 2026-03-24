@@ -134,19 +134,21 @@
                                 </div>
                             </label>
 
-                            {{-- Card --}}
-                            <label class="relative cursor-pointer">
-                                <input type="radio" name="payment_method" value="card" class="sr-only peer" x-model="payment">
-                                <div class="p-4 bg-[#0A0A0A] border border-[#D4AF37]/20 rounded-xl peer-checked:border-[#D4AF37] peer-checked:bg-[#D4AF37]/5 transition-all">
+                            {{-- Card (Temporarily Disabled) --}}
+                            <div class="relative cursor-not-allowed">
+                                <div class="p-4 bg-[#0A0A0A] border border-[#D4AF37]/10 rounded-xl relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-[#0A0A0A]/60 flex items-center justify-center">
+                                        <span class="px-2 py-0.5 bg-red-500/20 text-red-400 text-xs font-medium rounded-full border border-red-500/30">Not Available</span>
+                                    </div>
                                     <div class="flex items-center gap-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]/50"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
                                         <div>
-                                            <p class="text-white font-medium text-sm">Credit / Debit Card</p>
-                                            <p class="text-xs text-[#A0A0A0]">Visa, Mastercard</p>
+                                            <p class="text-white/50 font-medium text-sm">Credit / Debit Card</p>
+                                            <p class="text-xs text-[#A0A0A0]/50">Visa, Mastercard</p>
                                         </div>
                                     </div>
                                 </div>
-                            </label>
+                            </div>
 
                             {{-- Crypto --}}
                             <label class="relative cursor-pointer">
