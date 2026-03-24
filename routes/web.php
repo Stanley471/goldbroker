@@ -10,6 +10,7 @@ use App\Http\Controllers\IraController;
 use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\CryptoWalletController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
 
@@ -34,7 +35,10 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
-    Route::post('/wallet/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
+    Route::get('/wallet/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
+    Route::post('/wallet/deposit', [WalletController::class, 'processDeposit'])->name('wallet.deposit.process');
+    Route::get('/wallet/deposit/crypto', [WalletController::class, 'depositCrypto'])->name('wallet.deposit.crypto');
+    Route::get('/wallet/deposit/bank', [WalletController::class, 'depositBank'])->name('wallet.deposit.bank');
     Route::post('/orders/buy', [OrderController::class, 'buy'])->name('orders.buy')->middleware('throttle:10,1');
     Route::post('/orders/sell', [OrderController::class, 'sell'])->name('orders.sell')->middleware('throttle:10,1');
     Route::get('/ira', [IraController::class, 'index'])->name('ira.index');
@@ -78,5 +82,14 @@ Route::post('/products', [AdminProductController::class, 'store'])->name('produc
 Route::get('/products/{product}/edit', [AdminProductController::class, 'edit'])->name('products.edit');
 Route::put('/products/{product}', [AdminProductController::class, 'update'])->name('products.update');
 Route::delete('/products/{product}', [AdminProductController::class, 'destroy'])->name('products.destroy');
+    
+    // Crypto Wallet Management
+    Route::get('/crypto-wallets', [CryptoWalletController::class, 'index'])->name('crypto-wallets.index');
+    Route::get('/crypto-wallets/create', [CryptoWalletController::class, 'create'])->name('crypto-wallets.create');
+    Route::post('/crypto-wallets', [CryptoWalletController::class, 'store'])->name('crypto-wallets.store');
+    Route::get('/crypto-wallets/{cryptoWallet}/edit', [CryptoWalletController::class, 'edit'])->name('crypto-wallets.edit');
+    Route::put('/crypto-wallets/{cryptoWallet}', [CryptoWalletController::class, 'update'])->name('crypto-wallets.update');
+    Route::delete('/crypto-wallets/{cryptoWallet}', [CryptoWalletController::class, 'destroy'])->name('crypto-wallets.destroy');
+    Route::patch('/crypto-wallets/{cryptoWallet}/toggle', [CryptoWalletController::class, 'toggleActive'])->name('crypto-wallets.toggle');
 });
 require __DIR__.'/auth.php';

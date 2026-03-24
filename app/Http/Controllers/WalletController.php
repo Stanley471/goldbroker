@@ -33,18 +33,87 @@ class WalletController extends Controller
         return view('wallet.index', compact('wallet', 'transactions', 'holdingsGrouped', 'holdingsSummary'));
     }
 
-    public function deposit(DepositRequest $request)
+    public function deposit(Request $request)
     {
+        /** @var User $user */
+        $user = $request->user();
+        $wallet = $user->wallet;
+        
+        return view('wallet.deposit', compact('wallet'));
+    }
+
+    public function processDeposit(Request $request)
+    {
+        $request->validate([
+            'amount' => ['required', 'numeric', 'min:10', 'max:100000'],
+            'payment_method' => ['required', 'in:card,crypto,bank'],
+        ]);
 
         /** @var User $user */
         $user = $request->user();
+        $amount = $request->amount;
+        $paymentMethod = $request->payment_method;
 
-        $this->walletService->creditUSD(
-            $user,
-            $request->amount,
-            'Manual deposit'
-        );
+        // For demonstration, we'll simulate different payment flows
+        // In production, integrate with Stripe, Coinbase Commerce, etc.
+        
+        switch ($paymentMethod) {
+            case 'card':
+                // In production: redirect to Stripe/PayPal
+                // For now, simulate instant deposit
+                $this->walletService->creditUSD(
+                    $user,
+                    $amount,
+                    'Credit card deposit'
+                );
+                return redirect()->route('wallet.index')->with('success', 'Deposit of $' . number_format($amount, 2) . ' completed successfully!');
+                
+            case 'crypto':
+                // In production: generate crypto invoice
+                return redirect()->route('wallet.deposit.crypto', ['amount' => $amount]);
+                
+            case 'bank':
+                // In production: show bank transfer details
+                return redirect()->route('wallet.deposit.bank', ['amount' => $amount]);
+                
+            default:
+                return back()->with('error', 'Invalid payment method');
+        }
+    }
 
-        return back()->with('success', 'Deposit successful');
+    public function depositCrypto(Request $request)
+    {
+        $amount = $request->get('amount', 0);
+        $user = $request->user();
+        
+        // Get active crypto wallets from database
+        $cryptoWallets = \App\Models\CryptoWallet::active()->ordered()->get();
+        
+        if ($cryptoWallets->isEmpty()) {
+            return redirect()->route('wallet.deposit')
+                ->with('error', 'Cryptocurrency deposits are temporarily unavailable. Please use another payment method.');
+        }
+        
+        return view('wallet.deposit-crypto', compact('amount', 'cryptoWallets'));
+    }
+
+    public function depositBank(Request $request)
+    {
+        $amount = $request->get('amount', 0);
+        $user = $request->user();
+        
+        // Bank transfer details
+        $bankDetails = [
+            'account_name' => 'GoldVault Inc.',
+            'account_number' => '****1234',
+            'routing_number' => '021000021',
+            'swift' => 'CHASUS33',
+            'iban' => 'US64CHAS93001234567890',
+            'bank_name' => 'JPMorgan Chase Bank',
+            'bank_address' => '270 Park Avenue, New York, NY 10017',
+            'reference' => 'GV-' . $user->id . '-' . time(),
+        ];
+        
+        return view('wallet.deposit-bank', compact('amount', 'bankDetails'));
     }
 }

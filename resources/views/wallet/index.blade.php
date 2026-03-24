@@ -160,33 +160,55 @@
 
                 {{-- Deposit Tab --}}
                 <div x-show="tab === 'deposit'" style="display: none;">
-                    <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-8 max-w-md">
-                        <h2 class="text-xl font-semibold text-white mb-2" style="font-family: 'Playfair Display';">Deposit Funds</h2>
-                        <p class="text-[#A0A0A0] text-sm mb-6">Add USD to your vault to start investing in precious metals.</p>
-                        <form method="POST" action="{{ route('wallet.deposit') }}" class="space-y-4">
-                            @csrf
-                            <div>
-                                <label class="block text-sm text-[#A0A0A0] mb-2">Amount (USD)</label>
-                                <div class="relative">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-4 top-1/2 -translate-y-1/2 text-[#666]"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                                    <input type="number" name="amount" min="1" placeholder="Enter amount"
-                                        class="w-full bg-[#0A0A0A] border border-[#D4AF37]/30 rounded-xl pl-12 pr-4 py-3 text-white placeholder-[#666] focus:border-[#D4AF37] focus:outline-none transition-colors" />
+                    <div class="max-w-4xl">
+                        <h2 class="text-xl font-semibold text-white mb-6" style="font-family: 'Playfair Display';">Choose Payment Method</h2>
+                        
+                        <div class="grid sm:grid-cols-3 gap-4 mb-8">
+                            {{-- Credit Card --}}
+                            <a href="{{ route('wallet.deposit') }}?method=card" class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 hover:border-[#D4AF37] transition-all group">
+                                <div class="w-12 h-12 bg-[#D4AF37]/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-[#D4AF37]/30 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
                                 </div>
-                                @error('amount') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                                <h3 class="text-white font-semibold mb-1">Credit Card</h3>
+                                <p class="text-xs text-[#A0A0A0] mb-3">Visa, Mastercard, Amex</p>
+                                <span class="text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded">Instant</span>
+                            </a>
+
+                            {{-- Cryptocurrency --}}
+                            <a href="{{ route('wallet.deposit') }}?method=crypto" class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 hover:border-[#D4AF37] transition-all group">
+                                <div class="w-12 h-12 bg-[#D4AF37]/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-[#D4AF37]/30 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><circle cx="12" cy="12" r="10"></circle><path d="M9.5 9.5c.5-1 1.5-1.5 2.5-1.5s2 .5 2.5 1.5"></path><path d="M9.5 14.5c.5 1 1.5 1.5 2.5 1.5s2-.5 2.5-1.5"></path><path d="M12 8v8"></path></svg>
+                                </div>
+                                <h3 class="text-white font-semibold mb-1">Cryptocurrency</h3>
+                                <p class="text-xs text-[#A0A0A0] mb-3">BTC, ETH, USDT, USDC</p>
+                                <span class="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded">~10 min</span>
+                            </a>
+
+                            {{-- Bank Transfer --}}
+                            <a href="{{ route('wallet.deposit') }}?method=bank" class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 hover:border-[#D4AF37] transition-all group">
+                                <div class="w-12 h-12 bg-[#D4AF37]/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-[#D4AF37]/30 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                </div>
+                                <h3 class="text-white font-semibold mb-1">Bank Transfer</h3>
+                                <p class="text-xs text-[#A0A0A0] mb-3">Wire, ACH, SEPA</p>
+                                <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded">1-3 days</span>
+                            </a>
+                        </div>
+
+                        <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6">
+                            <div class="flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37] mt-0.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                                <div>
+                                    <h4 class="text-white font-medium mb-1">Deposit Information</h4>
+                                    <ul class="text-sm text-[#A0A0A0] space-y-1">
+                                        <li>• Minimum deposit: $10.00</li>
+                                        <li>• Maximum deposit: $100,000.00</li>
+                                        <li>• Credit card deposits are instant with a 2.5% fee</li>
+                                        <li>• Crypto and Bank transfers have no fees</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="flex gap-2">
-                                @foreach([100, 500, 1000, 5000] as $amount)
-                                    <button type="button" onclick="this.closest('form').querySelector('input[name=amount]').value={{ $amount }}"
-                                        class="px-3 py-1 text-xs rounded-full border border-[#D4AF37]/30 text-[#A0A0A0] hover:border-[#D4AF37] hover:text-white transition-colors">
-                                        ${{ number_format($amount) }}
-                                    </button>
-                                @endforeach
-                            </div>
-                            <button type="submit" class="w-full btn-primary justify-center py-3">
-                                Deposit Funds
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                            </button>
-                        </form>
+                        </div>
                     </div>
                 </div>
 
