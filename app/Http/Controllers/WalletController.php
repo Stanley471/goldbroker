@@ -39,7 +39,15 @@ class WalletController extends Controller
         $user = $request->user();
         $wallet = $user->wallet;
         
-        return view('wallet.deposit', compact('wallet'));
+        // Get selected method from query parameter (e.g., ?method=crypto)
+        $selectedMethod = $request->get('method', 'card');
+        
+        // Validate method
+        if (!in_array($selectedMethod, ['card', 'crypto', 'bank'])) {
+            $selectedMethod = 'card';
+        }
+        
+        return view('wallet.deposit', compact('wallet', 'selectedMethod'));
     }
 
     public function processDeposit(Request $request)

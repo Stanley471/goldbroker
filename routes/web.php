@@ -57,8 +57,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //checkout routes
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
-Route::get('/checkout/pending', [CheckoutController::class, 'pending'])->name('checkout.pending');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/checkout/pending', [CheckoutController::class, 'pending'])->name('checkout.pending');
+    Route::get('/checkout/crypto', [CheckoutController::class, 'cryptoPayment'])->name('checkout.crypto');
+    Route::get('/checkout/bank', [CheckoutController::class, 'bankPayment'])->name('checkout.bank');
+    Route::post('/checkout/confirm', [CheckoutController::class, 'confirmPayment'])->name('checkout.confirm');
     
     //throttled routes
     Route::middleware(['throttle:10,1'])->group(function () {

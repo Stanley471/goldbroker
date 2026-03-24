@@ -121,15 +121,187 @@ class CheckoutController extends Controller
             }
         }
 
-        // For other payment methods — redirect to pending page
-        return redirect()->route('checkout.pending')->with([
-            'payment_method' => $request->payment_method,
-            'total' => $total,
-        ]);
+        // For credit card - process immediately (in production: integrate with Stripe)
+        if ($request->payment_method === 'card') {
+            try {
+                \DB::transaction(function () use ($user, $cart, $request, $subtotal, $shippingFee, $total) {
+                    foreach ($cart->items as $item) {
+                        $itemTotal = $item->locked_price_per_gram * $item->product->weight_grams * $item->quantity;
+                        $itemShippingFee = $request->delivery_method === 'ship' ? $itemTotal * 0.005 : 0;
+                        $itemPriceWithShipping = $itemTotal + $itemShippingFee;
+
+                        // Decrement stock
+                        $item->product->decrement('stock', $item->quantity);
+
+                        // Create order
+                        $order = \App\Models\Order::create([
+                            'user_id' => $user->id,
+                            'order_type' => 'buy',
+                            'gold_grams' => $item->product->weight_grams * $item->quantity,
+                            'price_per_gram_usd' => $item->locked_price_per_gram,
+                            'total_usd' => $itemPriceWithShipping,
+                            'status' => 'completed',
+                            'reference_number' => strtoupper(\Str::random(10)),
+                            'delivery_method' => $request->delivery_method,
+                            'vault_id' => in_array($request->delivery_method, ['vault', 'pickup']) ? $request->vault_id : null,
+                            'shipping_address' => $request->delivery_method === 'ship' ? $request->shipping_address : null,
+                            'shipping_fee' => $itemShippingFee,
+                            'product_id' => $item->product->id,
+                        ]);
+
+                        // Create user holding
+                        $this->userHoldingService->createHolding(
+                            user: $user,
+                            product: $item->product,
+                            quantity: $item->quantity,
+                            purchasePricePerUnit: $item->locked_price_per_gram * $item->product->weight_grams,
+                            order: $order,
+                            vaultId: in_array($request->delivery_method, ['vault', 'pickup']) ? $request->vault_id : null,
+                            storageLocation: $request->delivery_method === 'ship' ? 'personal' : 'vault'
+                        );
+                    }
+
+                    // Clear cart
+                    $this->cartService->clearCart($user);
+                });
+
+                return redirect()->route('dashboard')->with('success', 'Order placed successfully! Your products have been added to your vault.');
+
+            } catch (\Exception $e) {
+                return back()->with('error', $e->getMessage());
+            }
+        }
+
+        // For crypto and bank - redirect to payment instructions page
+        if (in_array($request->payment_method, ['crypto', 'bank_transfer'])) {
+            // Store order details in session for after payment
+            session(['pending_order' => [
+                'items' => $cart->items->map(fn($item) => [
+                    'product_id' => $item->product_id,
+                    'quantity' => $item->quantity,
+                    'price' => $item->locked_price_per_gram * $item->product->weight_grams,
+                ])->toArray(),
+                'delivery_method' => $request->delivery_method,
+                'vault_id' => $request->vault_id,
+                'shipping_address' => $request->shipping_address,
+                'subtotal' => $subtotal,
+                'shipping_fee' => $shippingFee,
+                'total' => $total,
+                'payment_method' => $request->payment_method,
+            ]]);
+
+            if ($request->payment_method === 'crypto') {
+                return redirect()->route('checkout.crypto', ['amount' => $total]);
+            } else {
+                return redirect()->route('checkout.bank', ['amount' => $total]);
+            }
+        }
+
+        return back()->with('error', 'Invalid payment method.');
     }
 
     public function pending()
     {
         return view('checkout.pending');
+    }
+
+    public function cryptoPayment(Request $request)
+    {
+        $amount = $request->get('amount', 0);
+        $user = auth()->user();
+        
+        $cryptoWallets = \App\Models\CryptoWallet::active()->ordered()->get();
+        
+        if ($cryptoWallets->isEmpty()) {
+            return redirect()->route('checkout.index')
+                ->with('error', 'Cryptocurrency payments are temporarily unavailable. Please use another payment method.');
+        }
+        
+        return view('checkout.crypto', compact('amount', 'cryptoWallets'));
+    }
+
+    public function bankPayment(Request $request)
+    {
+        $amount = $request->get('amount', 0);
+        $user = auth()->user();
+        
+        $bankAccounts = \App\Models\BankAccount::active()->ordered()->get();
+        
+        if ($bankAccounts->isEmpty()) {
+            return redirect()->route('checkout.index')
+                ->with('error', 'Bank transfers are temporarily unavailable. Please use another payment method.');
+        }
+        
+        $reference = 'ORD-' . $user->id . '-' . strtoupper(substr(md5(uniqid()), 0, 8));
+        
+        return view('checkout.bank', compact('amount', 'bankAccounts', 'reference'));
+    }
+
+    public function confirmPayment(Request $request)
+    {
+        $pendingOrder = session('pending_order');
+        
+        if (!$pendingOrder) {
+            return redirect()->route('cart.index')->with('error', 'No pending order found.');
+        }
+
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+
+        try {
+            \DB::transaction(function () use ($user, $pendingOrder) {
+                $cart = $this->cartService->getOrCreateCart($user);
+                
+                foreach ($pendingOrder['items'] as $itemData) {
+                    $product = \App\Models\Product::find($itemData['product_id']);
+                    if (!$product) continue;
+
+                    $itemTotal = $itemData['price'] * $itemData['quantity'];
+                    $itemShippingFee = $pendingOrder['delivery_method'] === 'ship' ? $itemTotal * 0.005 : 0;
+                    $itemPriceWithShipping = $itemTotal + $itemShippingFee;
+
+                    // Decrement stock
+                    $product->decrement('stock', $itemData['quantity']);
+
+                    // Create order
+                    $order = \App\Models\Order::create([
+                        'user_id' => $user->id,
+                        'order_type' => 'buy',
+                        'gold_grams' => $product->weight_grams * $itemData['quantity'],
+                        'price_per_gram_usd' => $itemData['price'] / $product->weight_grams,
+                        'total_usd' => $itemPriceWithShipping,
+                        'status' => 'pending',
+                        'reference_number' => strtoupper(\Str::random(10)),
+                        'delivery_method' => $pendingOrder['delivery_method'],
+                        'vault_id' => in_array($pendingOrder['delivery_method'], ['vault', 'pickup']) ? $pendingOrder['vault_id'] : null,
+                        'shipping_address' => $pendingOrder['delivery_method'] === 'ship' ? $pendingOrder['shipping_address'] : null,
+                        'shipping_fee' => $itemShippingFee,
+                        'product_id' => $product->id,
+                    ]);
+
+                    // Create user holding
+                    $this->userHoldingService->createHolding(
+                        user: $user,
+                        product: $product,
+                        quantity: $itemData['quantity'],
+                        purchasePricePerUnit: $itemData['price'],
+                        order: $order,
+                        vaultId: in_array($pendingOrder['delivery_method'], ['vault', 'pickup']) ? $pendingOrder['vault_id'] : null,
+                        storageLocation: $pendingOrder['delivery_method'] === 'ship' ? 'personal' : 'vault'
+                    );
+                }
+
+                // Clear cart
+                $this->cartService->clearCart($user);
+            });
+
+            // Clear pending order from session
+            session()->forget('pending_order');
+
+            return redirect()->route('dashboard')->with('success', 'Order placed successfully! Your payment is being processed. Your products will be added to your vault once confirmed.');
+
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 }

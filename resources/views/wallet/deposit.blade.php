@@ -36,7 +36,7 @@
             <div class="grid lg:grid-cols-3 gap-8">
                 {{-- Payment Method Selection --}}
                 <div class="lg:col-span-2">
-                    <div x-data="{ method: '{{ old('payment_method', 'card') }}' }">
+                    <div x-data="{ method: '{{ old('payment_method', $selectedMethod ?? 'card') }}' }">
                         
                         {{-- Payment Method Cards --}}
                         <div class="grid sm:grid-cols-3 gap-4 mb-8">
