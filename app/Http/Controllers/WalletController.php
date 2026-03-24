@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\WalletService;
+use App\Services\UserHoldingService;
 
 use App\Models\User;
 use App\Http\Requests\DepositRequest;
@@ -10,7 +11,10 @@ use Illuminate\Http\Request;
 
 class WalletController extends Controller
 {
-    public function __construct(private WalletService $walletService) {}
+    public function __construct(
+        private WalletService $walletService,
+        private UserHoldingService $userHoldingService
+    ) {}
 
     public function index(Request $request)
     {
@@ -19,7 +23,14 @@ class WalletController extends Controller
 
         $wallet = $user->wallet;
         $transactions = $user->transactions()->latest()->get();
-        return view('wallet.index', compact('wallet', 'transactions'));
+        
+        // Get holdings grouped by product
+        $holdingsGrouped = $this->userHoldingService->getHoldingsGroupedByProduct($user);
+        
+        // Get holdings summary
+        $holdingsSummary = $this->userHoldingService->getHoldingsSummary($user);
+        
+        return view('wallet.index', compact('wallet', 'transactions', 'holdingsGrouped', 'holdingsSummary'));
     }
 
     public function deposit(DepositRequest $request)

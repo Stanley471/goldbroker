@@ -12,6 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Models\Transaction;
 use App\Models\Order;
 use App\Models\IraAccount;
+use App\Models\UserHolding;
 
 class User extends Authenticatable
 {
@@ -91,5 +92,15 @@ public function iraAccounts()
 public function cart()
 {
     return $this->hasOne(Cart::class);
+}
+
+public function holdings()
+{
+    return $this->hasMany(UserHolding::class);
+}
+
+public function activeHoldings()
+{
+    return $this->hasMany(UserHolding::class)->where('status', 'active');
 }
 }

@@ -35,24 +35,25 @@
                     <p class="text-3xl font-bold text-[#D4AF37]">${{ number_format($wallet->usd_balance, 2) }}</p>
                 </div>
                 <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6">
-                    <p class="text-sm text-[#A0A0A0] mb-1">Gold Holdings</p>
-                    <p class="text-3xl font-bold text-white">{{ number_format($wallet->gold_balance_grams, 4) }}g</p>
+                    <p class="text-sm text-[#A0A0A0] mb-1">Total Products</p>
+                    <p class="text-3xl font-bold text-white">{{ $holdingsSummary['total_products'] ?? 0 }}</p>
+                    <p class="text-sm text-[#666]">{{ $holdingsSummary['unique_products'] ?? 0 }} different types</p>
                 </div>
                 <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6">
-                    <p class="text-sm text-[#A0A0A0] mb-1">Total Transactions</p>
-                    <p class="text-3xl font-bold text-white">{{ $transactions->count() }}</p>
-                    <p class="text-sm text-[#666]">All time</p>
+                    <p class="text-sm text-[#A0A0A0] mb-1">Portfolio Value</p>
+                    <p class="text-3xl font-bold text-[#D4AF37]">${{ number_format($holdingsSummary['total_current_value'] ?? 0, 2) }}</p>
+                    @if(($holdingsSummary['profit_loss'] ?? 0) >= 0)
+                        <p class="text-sm text-green-500">+${{ number_format($holdingsSummary['profit_loss'] ?? 0, 2) }} ({{ number_format($holdingsSummary['profit_loss_percent'] ?? 0, 2) }}%)</p>
+                    @else
+                        <p class="text-sm text-red-500">-${{ number_format(abs($holdingsSummary['profit_loss'] ?? 0), 2) }} ({{ number_format($holdingsSummary['profit_loss_percent'] ?? 0, 2) }}%)</p>
+                    @endif
                 </div>
                 <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6">
-                    <p class="text-sm text-[#A0A0A0] mb-1">Gold Value (USD)</p>
-                    <p class="text-3xl font-bold text-[#D4AF37]">
-                        @php $goldPrice = app(\App\Services\GoldPriceService::class)->getCurrentPrice(); @endphp
-                        @if($goldPrice)
-                            ${{ number_format($wallet->gold_balance_grams * $goldPrice->price_per_gram_usd, 2) }}
-                        @else
-                            --
-                        @endif
-                    </p>
+                    <p class="text-sm text-[#A0A0A0] mb-1">Total Gold Weight</p>
+                    <p class="text-3xl font-bold text-white">{{ number_format($holdingsSummary['total_gold_grams'] ?? 0, 2) }}g</p>
+                    @if(($holdingsSummary['total_silver_grams'] ?? 0) > 0)
+                        <p class="text-sm text-[#666]">{{ number_format($holdingsSummary['total_silver_grams'], 2) }}g silver</p>
+                    @endif
                 </div>
             </div>
 
@@ -69,81 +70,99 @@
 
                 {{-- Holdings Tab --}}
                 <div x-show="tab === 'holdings'">
-                    <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead>
-                                    <tr class="border-b border-[#D4AF37]/20">
-                                        <th class="text-left py-4 px-6 text-[#A0A0A0] font-medium text-sm">Asset</th>
-                                        <th class="text-right py-4 px-6 text-[#A0A0A0] font-medium text-sm">Balance</th>
-                                        <th class="text-right py-4 px-6 text-[#A0A0A0] font-medium text-sm">USD Value</th>
-                                        <th class="text-right py-4 px-6 text-[#A0A0A0] font-medium text-sm">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="border-b border-[#D4AF37]/10 hover:bg-[#D4AF37]/5 transition-colors">
-                                        <td class="py-4 px-6">
-                                            <div class="flex items-center gap-3">
-                                                <span class="text-2xl">🥇</span>
-                                                <div>
-                                                    <p class="text-white font-medium">Gold</p>
-                                                    <p class="text-xs text-[#666]">Physical gold in grams</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-right py-4 px-6">
-                                            <p class="text-[#D4AF37] font-semibold">{{ number_format($wallet->gold_balance_grams, 6) }}g</p>
-                                        </td>
-                                        <td class="text-right py-4 px-6">
-                                            <p class="text-white font-semibold">
-                                                @if($goldPrice)
-                                                    ${{ number_format($wallet->gold_balance_grams * $goldPrice->price_per_gram_usd, 2) }}
-                                                @else
-                                                    --
-                                                @endif
-                                            </p>
-                                        </td>
-                                        <td class="text-right py-4 px-6">
-                                            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-1 text-sm text-[#D4AF37] hover:text-[#B8860B] transition-colors">
-                                                Trade
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-b border-[#D4AF37]/10 hover:bg-[#D4AF37]/5 transition-colors">
-                                        <td class="py-4 px-6">
-                                            <div class="flex items-center gap-3">
-                                                <span class="text-2xl">💵</span>
-                                                <div>
-                                                    <p class="text-white font-medium">USD</p>
-                                                    <p class="text-xs text-[#666]">Available cash balance</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-right py-4 px-6">
-                                            <p class="text-white font-semibold">${{ number_format($wallet->usd_balance, 2) }}</p>
-                                        </td>
-                                        <td class="text-right py-4 px-6">
-                                            <p class="text-white font-semibold">${{ number_format($wallet->usd_balance, 2) }}</p>
-                                        </td>
-                                        <td class="text-right py-4 px-6">
-                                            <button @click="tab = 'deposit'" class="inline-flex items-center gap-1 text-sm text-[#D4AF37] hover:text-[#B8860B] transition-colors">
-                                                Deposit
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    @if(count($holdingsGrouped) > 0)
+                        <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b border-[#D4AF37]/20">
+                                            <th class="text-left py-4 px-6 text-[#A0A0A0] font-medium text-sm">Product</th>
+                                            <th class="text-right py-4 px-6 text-[#A0A0A0] font-medium text-sm">Quantity</th>
+                                            <th class="text-right py-4 px-6 text-[#A0A0A0] font-medium text-sm">Purchase Price</th>
+                                            <th class="text-right py-4 px-6 text-[#A0A0A0] font-medium text-sm">Current Value</th>
+                                            <th class="text-right py-4 px-6 text-[#A0A0A0] font-medium text-sm">P/L</th>
+                                            <th class="text-center py-4 px-6 text-[#A0A0A0] font-medium text-sm">Metal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($holdingsGrouped as $group)
+                                            <tr class="border-b border-[#D4AF37]/10 hover:bg-[#D4AF37]/5 transition-colors">
+                                                <td class="py-4 px-6">
+                                                    <div class="flex items-center gap-3">
+                                                        @if($group['product']->image)
+                                                            <img src="{{ asset('storage/' . $group['product']->image) }}" alt="{{ $group['product']->name }}" class="w-10 h-10 object-cover rounded">
+                                                        @else
+                                                            <span class="text-2xl">{{ $group['product']->metal_type === 'gold' ? '🥇' : '🥈' }}</span>
+                                                        @endif
+                                                        <div>
+                                                            <p class="text-white font-medium">{{ $group['product']->name }}</p>
+                                                            <p class="text-xs text-[#666]">{{ number_format($group['product']->weight_grams, 2) }}g {{ $group['product']->metal_type }}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-right py-4 px-6">
+                                                    <p class="text-white font-semibold">{{ $group['total_quantity'] }}</p>
+                                                </td>
+                                                <td class="text-right py-4 px-6">
+                                                    <p class="text-[#A0A0A0]">${{ number_format($group['total_purchase_price'], 2) }}</p>
+                                                    <p class="text-xs text-[#666]">${{ number_format($group['total_purchase_price'] / $group['total_quantity'], 2) }}/unit</p>
+                                                </td>
+                                                <td class="text-right py-4 px-6">
+                                                    <p class="text-[#D4AF37] font-semibold">${{ number_format($group['current_value'], 2) }}</p>
+                                                    <p class="text-xs text-[#666]">${{ number_format($group['current_value'] / $group['total_quantity'], 2) }}/unit</p>
+                                                </td>
+                                                <td class="text-right py-4 px-6">
+                                                    @if($group['profit_loss'] >= 0)
+                                                        <p class="text-green-500 font-semibold">+${{ number_format($group['profit_loss'], 2) }}</p>
+                                                        <p class="text-xs text-green-500">+{{ number_format($group['profit_loss_percent'], 2) }}%</p>
+                                                    @else
+                                                        <p class="text-red-500 font-semibold">-${{ number_format(abs($group['profit_loss']), 2) }}</p>
+                                                        <p class="text-xs text-red-500">{{ number_format($group['profit_loss_percent'], 2) }}%</p>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center py-4 px-6">
+                                                    <span class="px-2 py-1 text-xs rounded-full {{ $group['product']->metal_type === 'gold' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-gray-500/20 text-gray-400' }}">
+                                                        {{ ucfirst($group['product']->metal_type) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot class="bg-[#0A0A0A]">
+                                        <tr>
+                                            <td class="py-4 px-6 text-[#A0A0A0] font-medium">Total</td>
+                                            <td class="text-right py-4 px-6 text-white font-semibold">{{ $holdingsSummary['total_products'] }}</td>
+                                            <td class="text-right py-4 px-6 text-[#A0A0A0]">${{ number_format($holdingsSummary['total_purchase_value'], 2) }}</td>
+                                            <td class="text-right py-4 px-6 text-[#D4AF37] font-bold">${{ number_format($holdingsSummary['total_current_value'], 2) }}</td>
+                                            <td class="text-right py-4 px-6 {{ ($holdingsSummary['profit_loss'] ?? 0) >= 0 ? 'text-green-500' : 'text-red-500' }} font-semibold">
+                                                {{ ($holdingsSummary['profit_loss'] ?? 0) >= 0 ? '+' : '-' }}${{ number_format(abs($holdingsSummary['profit_loss'] ?? 0), 2) }}
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-12 text-center">
+                            <div class="w-16 h-16 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><path d="M18 21V10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v11"></path><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 1.132-1.803l7.95-3.974a2 2 0 0 1 1.837 0l7.948 3.974A2 2 0 0 1 22 8z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white mb-2">No Holdings Yet</h3>
+                            <p class="text-[#A0A0A0] mb-6">Start building your precious metals portfolio by browsing our products.</p>
+                            <a href="{{ route('products.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-[#D4AF37] text-[#0A0A0A] rounded-xl font-medium hover:bg-[#B8860B] transition-colors">
+                                Browse Products
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                            </a>
+                        </div>
+                    @endif
                 </div>
 
                 {{-- Deposit Tab --}}
                 <div x-show="tab === 'deposit'" style="display: none;">
                     <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-8 max-w-md">
                         <h2 class="text-xl font-semibold text-white mb-2" style="font-family: 'Playfair Display';">Deposit Funds</h2>
-                        <p class="text-[#A0A0A0] text-sm mb-6">Add USD to your vault to start investing in gold.</p>
+                        <p class="text-[#A0A0A0] text-sm mb-6">Add USD to your vault to start investing in precious metals.</p>
                         <form method="POST" action="{{ route('wallet.deposit') }}" class="space-y-4">
                             @csrf
                             <div>

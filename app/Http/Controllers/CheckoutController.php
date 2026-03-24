@@ -6,6 +6,7 @@ use App\Models\Vault;
 use App\Services\CartService;
 use App\Services\GoldPriceService;
 use App\Services\WalletService;
+use App\Services\UserHoldingService;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
@@ -13,7 +14,8 @@ class CheckoutController extends Controller
     public function __construct(
         private CartService $cartService,
         private GoldPriceService $goldPriceService,
-        private WalletService $walletService
+        private WalletService $walletService,
+        private UserHoldingService $userHoldingService
     ) {}
 
     public function index()
@@ -66,45 +68,53 @@ class CheckoutController extends Controller
             try {
                 \DB::transaction(function () use ($user, $cart, $request, $subtotal, $shippingFee, $total) {
                     foreach ($cart->items as $item) {
+                        $itemTotal = $item->locked_price_per_gram * $item->product->weight_grams * $item->quantity;
+                        $itemShippingFee = $request->delivery_method === 'ship' ? $itemTotal * 0.005 : 0;
+                        $itemPriceWithShipping = $itemTotal + $itemShippingFee;
+
                         // Deduct USD from wallet
                         $this->walletService->debitUSD(
                             $user,
-                            $item->locked_price_per_gram * $item->product->weight_grams * $item->quantity,
-                            'Purchase: ' . $item->product->name
-                        );
-
-                        // Credit gold to wallet
-                        $this->walletService->creditGold(
-                            $user,
-                            $item->product->weight_grams * $item->quantity,
-                            'Purchase: ' . $item->product->name
+                            $itemPriceWithShipping,
+                            'Purchase: ' . $item->product->name . ' x' . $item->quantity
                         );
 
                         // Decrement stock
                         $item->product->decrement('stock', $item->quantity);
 
                         // Create order
-                        \App\Models\Order::create([
+                        $order = \App\Models\Order::create([
                             'user_id' => $user->id,
                             'order_type' => 'buy',
                             'gold_grams' => $item->product->weight_grams * $item->quantity,
                             'price_per_gram_usd' => $item->locked_price_per_gram,
-                            'total_usd' => $item->locked_price_per_gram * $item->product->weight_grams * $item->quantity,
+                            'total_usd' => $itemPriceWithShipping,
                             'status' => 'completed',
                             'reference_number' => strtoupper(\Str::random(10)),
                             'delivery_method' => $request->delivery_method,
                             'vault_id' => in_array($request->delivery_method, ['vault', 'pickup']) ? $request->vault_id : null,
                             'shipping_address' => $request->delivery_method === 'ship' ? $request->shipping_address : null,
-                            'shipping_fee' => $request->delivery_method === 'ship' ? ($item->locked_price_per_gram * $item->product->weight_grams * $item->quantity) * 0.005 : 0,
+                            'shipping_fee' => $itemShippingFee,
                             'product_id' => $item->product->id,
                         ]);
+
+                        // Create user holding for this product purchase
+                        $this->userHoldingService->createHolding(
+                            user: $user,
+                            product: $item->product,
+                            quantity: $item->quantity,
+                            purchasePricePerUnit: $item->locked_price_per_gram * $item->product->weight_grams,
+                            order: $order,
+                            vaultId: in_array($request->delivery_method, ['vault', 'pickup']) ? $request->vault_id : null,
+                            storageLocation: $request->delivery_method === 'ship' ? 'personal' : 'vault'
+                        );
                     }
 
                     // Clear cart
                     $this->cartService->clearCart($user);
                 });
 
-                return redirect()->route('dashboard')->with('success', 'Order placed successfully! Your gold has been credited to your vault.');
+                return redirect()->route('dashboard')->with('success', 'Order placed successfully! Your products have been added to your vault.');
 
             } catch (\Exception $e) {
                 return back()->with('error', $e->getMessage());
