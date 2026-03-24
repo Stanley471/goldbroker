@@ -18,8 +18,13 @@
 </x-nav-link>
 
 <!-- Wallet -->
-<x-nav-link :href="route('wallet.index')" :active="request()->routeIs('wallet.*')">
+<x-nav-link :href="route('wallet.index')" :active="request()->routeIs('wallet.index')">
     {{ __('Wallet') }}
+</x-nav-link>
+
+<!-- Deposit -->
+<x-nav-link :href="route('wallet.deposit')" :active="request()->routeIs('wallet.deposit*')">
+    {{ __('Deposit') }}
 </x-nav-link>
 
 <!-- IRA -->
@@ -85,6 +90,12 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('wallet.index')" :active="request()->routeIs('wallet.index')">
+                {{ __('Wallet') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('wallet.deposit')" :active="request()->routeIs('wallet.deposit*')">
+                {{ __('Deposit') }}
             </x-responsive-nav-link>
         </div>
 

@@ -22,7 +22,7 @@
             <p class="text-[#A0A0A0] text-sm mt-1">Complete your order</p>
         </div>
 
-        <form method="POST" action="{{ route('checkout.process') }}" x-data="{ delivery: 'vault', payment: 'wallet' }">
+        <form method="POST" action="{{ route('checkout.process') }}" x-data="{ delivery: 'vault', payment: 'wallet' }" x-on:submit="$event.target.payment_method.value = payment" x-cloak>
             @csrf
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

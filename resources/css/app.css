@@ -63,3 +63,8 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
+/* Alpine.js x-cloak - hides elements until Alpine is loaded */
+[x-cloak] {
+    display: none !important;
+}

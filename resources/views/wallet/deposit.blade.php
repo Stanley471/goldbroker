@@ -36,7 +36,7 @@
             <div class="grid lg:grid-cols-3 gap-8">
                 {{-- Payment Method Selection --}}
                 <div class="lg:col-span-2">
-                    <div x-data="{ method: '{{ old('payment_method', $selectedMethod ?? 'card') }}' }">
+                    <div x-data="{ method: '{{ old('payment_method', $selectedMethod ?? 'card') }}' }" x-cloak>
                         
                         {{-- Payment Method Cards --}}
                         <div class="grid sm:grid-cols-3 gap-4 mb-8">
@@ -84,9 +84,9 @@
                         </div>
 
                         {{-- Amount Input --}}
-                        <form method="POST" action="{{ route('wallet.deposit.process') }}" class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6">
+                        <form method="POST" action="{{ route('wallet.deposit.process') }}" class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6" x-on:submit="$event.target.payment_method.value = method">
                             @csrf
-                            <input type="hidden" name="payment_method" x-model="method">
+                            <input type="hidden" name="payment_method" :value="method">
 
                             <div class="mb-6">
                                 <label class="block text-sm text-[#A0A0A0] mb-3">Deposit Amount (USD)</label>

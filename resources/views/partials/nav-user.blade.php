@@ -30,8 +30,10 @@
             <div class="hidden lg:flex items-center gap-1">
                 <a href="{{ route('dashboard') }}" class="px-3 py-2 text-sm {{ request()->routeIs('dashboard') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Dashboard</a>
                 <a href="{{ route('wallet.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('wallet.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Vault</a>
+                <a href="{{ route('wallet.deposit') }}" class="px-3 py-2 text-sm {{ request()->routeIs('wallet.deposit*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Deposit</a>
                 <a href="{{ route('ira.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('ira.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">IRA</a>
                 <a href="{{ route('referrals.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('referrals.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Referrals</a>
+                <a href="{{ route('products.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('products.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Products</a>
             </div>
 
             {{-- Right side --}}
@@ -71,7 +73,8 @@
         <div class="section-container py-4">
             <div class="flex flex-col gap-1">
                 <a href="{{ route('dashboard') }}" class="px-4 py-3 text-sm {{ request()->routeIs('dashboard') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Dashboard</a>
-                <a href="{{ route('wallet.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('wallet.*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Vault</a>
+                <a href="{{ route('wallet.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('wallet.index') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Vault</a>
+                <a href="{{ route('wallet.deposit') }}" class="px-4 py-3 text-sm {{ request()->routeIs('wallet.deposit*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Deposit</a>
                 <a href="{{ route('ira.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('ira.*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">IRA</a>
                 <a href="{{ route('referrals.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('referrals.*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Referrals</a>
                 <a href="{{ route('products.index')}}" class="px-4 py-3 text-sm {{ request()->routeIs('products.*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Products</a>
