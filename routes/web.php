@@ -14,10 +14,17 @@ use App\Http\Controllers\Admin\CryptoWalletController;
 use App\Http\Controllers\Admin\BankAccountController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\KycController;
+use App\Http\Controllers\Admin\KycController as AdminKycController;
 
 Route::get('/', function () {
     $goldPrice = app(\App\Services\GoldPriceService::class)->getCurrentPrice();
-    return view('welcome', compact('goldPrice'));
+    $featuredProducts = \App\Models\Product::where('is_featured', true)
+        ->where('is_active', true)
+        ->where('stock', '>', 0)
+        ->take(4)
+        ->get();
+    return view('welcome', compact('goldPrice', 'featuredProducts'));
 });
 
 Route::get('/dashboard', function () {
@@ -69,6 +76,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/orders/sell', [OrderController::class, 'sell'])->name('orders.sell');
     
     });
+
+    // KYC Routes
+    Route::get('/kyc', [KycController::class, 'index'])->name('kyc.index');
+    Route::get('/kyc/create', [KycController::class, 'create'])->name('kyc.create');
+    Route::post('/kyc', [KycController::class, 'store'])->name('kyc.store');
+    Route::get('/kyc/{kyc}', [KycController::class, 'show'])->name('kyc.show');
+    Route::get('/kyc/{kyc}/document/{type}', [KycController::class, 'document'])->name('kyc.document');
 });
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
@@ -104,5 +118,12 @@ Route::delete('/products/{product}', [AdminProductController::class, 'destroy'])
     Route::put('/bank-accounts/{bankAccount}', [BankAccountController::class, 'update'])->name('bank-accounts.update');
     Route::delete('/bank-accounts/{bankAccount}', [BankAccountController::class, 'destroy'])->name('bank-accounts.destroy');
     Route::patch('/bank-accounts/{bankAccount}/toggle', [BankAccountController::class, 'toggleActive'])->name('bank-accounts.toggle');
+    
+    // KYC Management
+    Route::get('/kyc', [AdminKycController::class, 'index'])->name('kyc.index');
+    Route::get('/kyc/{kyc}', [AdminKycController::class, 'show'])->name('kyc.show');
+    Route::get('/kyc/{kyc}/document/{type}', [AdminKycController::class, 'document'])->name('kyc.document');
+    Route::patch('/kyc/{kyc}/approve', [AdminKycController::class, 'approve'])->name('kyc.approve');
+    Route::patch('/kyc/{kyc}/reject', [AdminKycController::class, 'reject'])->name('kyc.reject');
 });
 require __DIR__.'/auth.php';

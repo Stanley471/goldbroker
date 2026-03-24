@@ -13,17 +13,16 @@ use App\Models\Transaction;
 use App\Models\Order;
 use App\Models\IraAccount;
 use App\Models\UserHolding;
+use App\Models\KycSubmission;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+   
+     /** @var list<string> */
+     
     protected $fillable = [
         'first_name',
         'last_name',
@@ -36,7 +35,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be hidden for serialization.
-     *
      * @var list<string>
      */
     protected $hidden = [
@@ -102,5 +100,30 @@ public function holdings()
 public function activeHoldings()
 {
     return $this->hasMany(UserHolding::class)->where('status', 'active');
+}
+
+public function kycSubmissions()
+{
+    return $this->hasMany(KycSubmission::class);
+}
+
+public function latestKycSubmission()
+{
+    return $this->hasOne(KycSubmission::class)->latest();
+}
+
+public function isKycVerified(): bool
+{
+    return $this->kyc_status === 'verified';
+}
+
+public function isKycPending(): bool
+{
+    return $this->kyc_status === 'pending';
+}
+
+public function isKycRejected(): bool
+{
+    return $this->kyc_status === 'rejected';
 }
 }

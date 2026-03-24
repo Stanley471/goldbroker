@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\AdminLog;
+use App\Models\KycSubmission;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -14,15 +15,21 @@ class AdminController extends Controller
         $totalUsers = User::count();
         $totalOrders = Order::count();
         $totalGoldSold = Order::where('order_type', 'buy')->sum('gold_grams');
-        $pendingKyc = User::where('kyc_status', 'pending')->count();
+        $pendingKyc = KycSubmission::where('status', 'pending')->count();
         $recentOrders = Order::with('user')->latest()->take(10)->get();
+        $pendingKycSubmissions = KycSubmission::where('status', 'pending')
+            ->with('user')
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view('admin.dashboard', compact(
             'totalUsers',
             'totalOrders',
             'totalGoldSold',
             'pendingKyc',
-            'recentOrders'
+            'recentOrders',
+            'pendingKycSubmissions'
         ));
     }
     public function users()

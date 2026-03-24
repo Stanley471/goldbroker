@@ -36,6 +36,16 @@
 <x-nav-link :href="route('referrals.index')" :active="request()->routeIs('referrals.*')">
     {{ __('Referrals') }}
 </x-nav-link>
+
+<!-- KYC -->
+<x-nav-link :href="route('kyc.index')" :active="request()->routeIs('kyc.*')">
+    {{ __('KYC') }}
+    @if(auth()->user()->isKycVerified())
+        <span class="ml-1 text-green-500">✓</span>
+    @elseif(auth()->user()->isKycPending())
+        <span class="ml-1 text-yellow-500">⏳</span>
+    @endif
+</x-nav-link>
                 </div>
             </div>
 
@@ -96,6 +106,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('wallet.deposit')" :active="request()->routeIs('wallet.deposit*')">
                 {{ __('Deposit') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('kyc.index')" :active="request()->routeIs('kyc.*')">
+                {{ __('KYC') }}
             </x-responsive-nav-link>
         </div>
 

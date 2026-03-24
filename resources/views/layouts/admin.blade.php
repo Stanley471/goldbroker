@@ -22,6 +22,7 @@
             <div class="hidden lg:flex items-center gap-1">
                 <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 text-sm {{ request()->routeIs('admin.dashboard') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Dashboard</a>
                 <a href="{{ route('admin.users') }}" class="px-3 py-2 text-sm {{ request()->routeIs('admin.users*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Users</a>
+                <a href="{{ route('admin.kyc.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('admin.kyc*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">KYC</a>
                 <a href="{{ route('admin.orders') }}" class="px-3 py-2 text-sm {{ request()->routeIs('admin.orders') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Orders</a>
                 <a href="{{ route('admin.logs') }}" class="px-3 py-2 text-sm {{ request()->routeIs('admin.logs') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Logs</a>
                 <a href="{{ route('admin.products.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('admin.products*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Products</a>
@@ -54,6 +55,7 @@
             <div class="flex flex-col gap-1">
                 <a href="{{ route('admin.dashboard') }}" class="px-4 py-3 text-sm {{ request()->routeIs('admin.dashboard') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Dashboard</a>
                 <a href="{{ route('admin.users') }}" class="px-4 py-3 text-sm {{ request()->routeIs('admin.users*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Users</a>
+                <a href="{{ route('admin.kyc.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('admin.kyc*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">KYC</a>
                 <a href="{{ route('admin.orders') }}" class="px-4 py-3 text-sm {{ request()->routeIs('admin.orders') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Orders</a>
                 <a href="{{ route('admin.logs') }}" class="px-4 py-3 text-sm {{ request()->routeIs('admin.logs') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Logs</a>
                 <a href="{{ route('admin.products.index') }}" class="px-4 py-3 text-sm {{ request()->routeIs('admin.products*') ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-[#A0A0A0]' }} rounded-lg">Products</a>

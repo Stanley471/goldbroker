@@ -161,6 +161,70 @@
         </div>
     </section>
 
+    {{-- Featured Products --}}
+    @if($featuredProducts->count() > 0)
+    <section class="py-20 bg-[#0A0A0A]">
+        <div class="section-container">
+            <div class="section-inner">
+                <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4" style="font-family: 'Playfair Display';">Featured Products</h2>
+                        <p class="text-[#A0A0A0]">Discover our most popular gold and silver bullion products.</p>
+                    </div>
+                    <a href="{{ route('products.index') }}" class="inline-flex items-center gap-2 text-[#D4AF37] hover:text-[#B8860B] transition-colors font-medium">
+                        View All Products
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                    </a>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @foreach($featuredProducts as $product)
+                    <div class="group bg-[#141414] border border-[#D4AF37]/20 rounded-2xl overflow-hidden hover:border-[#D4AF37]/50 transition-all duration-300">
+                        <a href="{{ route('products.show', $product) }}" class="block relative">
+                            <div class="aspect-square overflow-hidden">
+                                @if($product->image)
+                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                @else
+                                    <div class="w-full h-full bg-[#1a1a1a] flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]/30"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="absolute top-3 left-3">
+                                <span class="px-2 py-1 bg-[#D4AF37] text-[#0A0A0A] text-xs font-bold rounded">{{ strtoupper($product->metal_type) }}</span>
+                            </div>
+                        </a>
+                        <div class="p-5">
+                            <a href="{{ route('products.show', $product) }}">
+                                <h3 class="text-white font-semibold mb-2 group-hover:text-[#D4AF37] transition-colors" style="font-family: 'Playfair Display';">{{ $product->name }}</h3>
+                            </a>
+                            <p class="text-sm text-[#A0A0A0] mb-3">{{ $product->brand }} • {{ $product->weight_grams }}g</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-[#D4AF37]">${{ number_format($product->current_price, 2) }}</span>
+                                @auth
+                                    <form action="{{ route('cart.add') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="px-4 py-2 bg-[#D4AF37] text-[#0A0A0A] text-sm font-semibold rounded-lg hover:bg-[#B8860B] transition-colors flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+                                            Add
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}" class="px-4 py-2 bg-[#D4AF37]/20 border border-[#D4AF37]/30 text-[#D4AF37] text-sm font-semibold rounded-lg hover:bg-[#D4AF37]/30 transition-colors">
+                                        Sign In
+                                    </a>
+                                @endauth
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+    @endif
+
     {{-- Live Prices Table --}}
     <section class="py-20 bg-[#0A0A0A]">
         <div class="section-container">

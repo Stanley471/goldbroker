@@ -34,6 +34,7 @@
                 <a href="{{ route('ira.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('ira.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">IRA</a>
                 <a href="{{ route('referrals.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('referrals.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Referrals</a>
                 <a href="{{ route('products.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('products.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Products</a>
+                <a href="{{ route('kyc.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('kyc.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">KYC</a>
             </div>
 
             {{-- Right side --}}
