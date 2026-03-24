@@ -68,6 +68,15 @@
             </div>
             <div class="flex items-center gap-2">
                 @auth
+                    {{-- Cart Icon with Count --}}
+                    <a href="{{ route('cart.index') }}" class="relative p-2 text-[#A0A0A0] hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+                        @if($cartItemCount > 0)
+                            <span class="absolute -top-1 -right-1 w-5 h-5 bg-[#D4AF37] text-[#0A0A0A] text-xs font-bold rounded-full flex items-center justify-center">
+                                {{ $cartItemCount > 99 ? '99+' : $cartItemCount }}
+                            </span>
+                        @endif
+                    </a>
                     <a href="{{ route('dashboard') }}" class="btn-primary text-sm py-2">Dashboard</a>
                 @else
                     <a href="{{ route('login') }}" class="hidden sm:block px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors">Sign In</a>
@@ -417,6 +426,33 @@
         </div>
     </div>
 </footer>
+
+{{-- Toast Notification for Cart --}}
+@if(session('cart_success'))
+    <div x-data="{ show: true }" 
+         x-init="setTimeout(() => show = false, 3000)"
+         x-show="show"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="translate-y-full opacity-0"
+         x-transition:enter-end="translate-y-0 opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="translate-y-0 opacity-100"
+         x-transition:leave-end="translate-y-full opacity-0"
+         class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-96 z-50">
+        <div class="bg-[#141414] border border-[#D4AF37]/30 rounded-xl shadow-2xl p-4 flex items-center gap-3">
+            <div class="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M20 6 9 17l-5-5"></path></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-white font-medium text-sm">{{ session('cart_success') }}</p>
+                <p class="text-[#A0A0A0] text-xs">Item added to your cart</p>
+            </div>
+            <a href="{{ route('cart.index') }}" class="px-3 py-1.5 bg-[#D4AF37] text-[#0A0A0A] text-xs font-medium rounded-lg hover:bg-[#B8860B] transition-colors flex-shrink-0">
+                View Cart
+            </a>
+        </div>
+    </div>
+@endif
 
 </body>
 </html>

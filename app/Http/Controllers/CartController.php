@@ -35,7 +35,7 @@ class CartController extends Controller
 
         try {
             $this->cartService->addItem($user, $product, $request->quantity);
-            return back()->with('success', $product->name . ' added to cart.');
+            return back()->with('cart_success', $product->name);
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
