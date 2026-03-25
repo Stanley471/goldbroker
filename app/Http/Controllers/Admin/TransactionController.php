@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Services\WalletService;
+use App\Mail\DepositConfirmed;
+use App\Mail\TransactionApproved;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class TransactionController extends Controller
 {
@@ -84,6 +87,13 @@ class TransactionController extends Controller
                 // If it's a buy order transaction, update the order status
                 if ($transaction->type === 'buy' && $transaction->order) {
                     $transaction->order->update(['status' => 'completed']);
+                }
+
+                // Send confirmation email based on transaction type
+                if ($transaction->type === 'deposit') {
+                    Mail::to($transaction->user->email)->send(new DepositConfirmed($transaction->user, $transaction));
+                } else {
+                    Mail::to($transaction->user->email)->send(new TransactionApproved($transaction->user, $transaction));
                 }
             });
 

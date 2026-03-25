@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\KycSubmission;
+use App\Mail\KycSubmitted;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class KycController extends Controller
@@ -86,6 +88,9 @@ class KycController extends Controller
 
             // Update user KYC status to pending
             $user->update(['kyc_status' => 'pending']);
+
+            // Send KYC submitted email
+            Mail::to($user->email)->send(new KycSubmitted($user, $submission));
 
             return redirect()->route('kyc.index')
                 ->with('success', 'Your KYC documents have been submitted successfully. We will review them shortly.');

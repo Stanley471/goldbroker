@@ -8,7 +8,9 @@ use App\Services\UserHoldingService;
 use App\Models\User;
 use App\Models\Transaction;
 use App\Http\Requests\DepositRequest;
+use App\Mail\DepositInitiated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class WalletController extends Controller
 {
@@ -80,7 +82,7 @@ class WalletController extends Controller
                     $reference = 'DEP-' . $user->id . '-' . strtoupper(substr(md5(uniqid()), 0, 8));
                     
                     // Create pending transaction
-                    Transaction::create([
+                    $transaction = Transaction::create([
                         'user_id' => $user->id,
                         'type' => 'deposit',
                         'amount' => $amount,
@@ -90,6 +92,9 @@ class WalletController extends Controller
                         'reference_number' => $reference,
                         'payment_method' => 'crypto',
                     ]);
+
+                    // Send deposit initiated email
+                    Mail::to($user->email)->send(new DepositInitiated($user, $transaction, 'crypto'));
                     
                     return redirect()->route('wallet.deposit.pending', ['reference' => $reference]);
                 }
@@ -104,7 +109,7 @@ class WalletController extends Controller
                     $reference = 'DEP-' . $user->id . '-' . strtoupper(substr(md5(uniqid()), 0, 8));
                     
                     // Create pending transaction
-                    Transaction::create([
+                    $transaction = Transaction::create([
                         'user_id' => $user->id,
                         'type' => 'deposit',
                         'amount' => $amount,
@@ -114,6 +119,9 @@ class WalletController extends Controller
                         'reference_number' => $reference,
                         'payment_method' => 'bank_transfer',
                     ]);
+
+                    // Send deposit initiated email
+                    Mail::to($user->email)->send(new DepositInitiated($user, $transaction, 'bank'));
                     
                     return redirect()->route('wallet.deposit.pending', ['reference' => $reference]);
                 }

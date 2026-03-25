@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\KycSubmission;
 use App\Models\User;
+use App\Mail\KycApproved;
+use App\Mail\KycRejected;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class KycController extends Controller
@@ -58,7 +61,8 @@ class KycController extends Controller
         // Update user KYC status
         $kyc->user->update(['kyc_status' => 'verified']);
 
-        // TODO: Send notification to user
+        // Send approval email
+        Mail::to($kyc->user->email)->send(new KycApproved($kyc->user));
 
         return redirect()->route('admin.kyc.index')
             ->with('success', 'KYC submission approved successfully.');
@@ -87,7 +91,8 @@ class KycController extends Controller
         // Update user KYC status
         $kyc->user->update(['kyc_status' => 'rejected']);
 
-        // TODO: Send notification to user
+        // Send rejection email
+        Mail::to($kyc->user->email)->send(new KycRejected($kyc->user, $kyc));
 
         return redirect()->route('admin.kyc.index')
             ->with('success', 'KYC submission rejected successfully.');

@@ -8,7 +8,9 @@ use App\Services\CartService;
 use App\Services\GoldPriceService;
 use App\Services\WalletService;
 use App\Services\UserHoldingService;
+use App\Mail\OrderPlaced;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -67,7 +69,8 @@ class CheckoutController extends Controller
             }
 
             try {
-                \DB::transaction(function () use ($user, $cart, $request, $subtotal, $shippingFee, $total) {
+                $orders = [];
+                \DB::transaction(function () use ($user, $cart, $request, $subtotal, $shippingFee, $total, &$orders) {
                     foreach ($cart->items as $item) {
                         $itemTotal = $item->locked_price_per_gram * $item->product->weight_grams * $item->quantity;
                         $itemShippingFee = $request->delivery_method === 'ship' ? $itemTotal * 0.005 : 0;
@@ -99,6 +102,8 @@ class CheckoutController extends Controller
                             'product_id' => $item->product->id,
                         ]);
 
+                        $orders[] = $order;
+
                         // Create user holding for this product purchase
                         $this->userHoldingService->createHolding(
                             user: $user,
@@ -115,6 +120,23 @@ class CheckoutController extends Controller
                     $this->cartService->clearCart($user);
                 });
 
+                // Send order confirmation email (outside transaction, with fresh order data)
+                foreach ($orders as $order) {
+                    // Reload order to ensure fresh data
+                    $freshOrder = \App\Models\Order::find($order->id);
+                    
+                    \Log::info('CheckoutController: Order data before email', [
+                        'order_id' => $freshOrder->id,
+                        'reference_number' => $freshOrder->reference_number,
+                        'total_usd' => $freshOrder->total_usd,
+                        'delivery_method' => $freshOrder->delivery_method,
+                        'status' => $freshOrder->status,
+                        'to_array' => $freshOrder->toArray()
+                    ]);
+                    
+                    Mail::to($user->email)->send(new OrderPlaced($user, $freshOrder));
+                }
+
                 return redirect()->route('dashboard')->with('success', 'Order placed successfully! Your products have been added to your vault.');
 
             } catch (\Exception $e) {
@@ -125,7 +147,8 @@ class CheckoutController extends Controller
         // For credit card - process immediately (in production: integrate with Stripe)
         if ($request->payment_method === 'card') {
             try {
-                \DB::transaction(function () use ($user, $cart, $request, $subtotal, $shippingFee, $total) {
+                $orders = [];
+                \DB::transaction(function () use ($user, $cart, $request, $subtotal, $shippingFee, $total, &$orders) {
                     foreach ($cart->items as $item) {
                         $itemTotal = $item->locked_price_per_gram * $item->product->weight_grams * $item->quantity;
                         $itemShippingFee = $request->delivery_method === 'ship' ? $itemTotal * 0.005 : 0;
@@ -150,6 +173,8 @@ class CheckoutController extends Controller
                             'product_id' => $item->product->id,
                         ]);
 
+                        $orders[] = $order;
+
                         // Create user holding
                         $this->userHoldingService->createHolding(
                             user: $user,
@@ -166,7 +191,12 @@ class CheckoutController extends Controller
                     $this->cartService->clearCart($user);
                 });
 
-                return redirect()->route('dashboard')->with('success', 'Order placed successfully! Your products have been added to your vault.');
+                // Send order confirmation emails (outside transaction)
+                foreach ($orders as $order) {
+                    // Reload order to ensure fresh data
+                    $freshOrder = \App\Models\Order::find($order->id);
+                    Mail::to($user->email)->send(new OrderPlaced($user, $freshOrder));
+                }
 
             } catch (\Exception $e) {
                 return back()->with('error', $e->getMessage());
