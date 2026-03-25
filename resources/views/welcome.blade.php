@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoldBroker - Buy & Sell Physical Gold</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#0A0A0A] text-white" style="font-family: 'Inter', sans-serif;">
@@ -43,8 +44,8 @@
     <div class="section-container">
         <div class="section-inner flex items-center justify-between h-20">
             <a class="flex items-center gap-3" href="/">
-                <div class="w-10 h-10 bg-gradient-to-br from-[#D4AF37] to-[#B8860B] rounded-lg flex items-center justify-center">
-                    <span class="text-[#0A0A0A] font-bold text-xl">G</span>
+                <div class="w-10 h-10 bg-gradient-to-br from-[#D4AF37] to-[#B8860B] rounded-lg flex items-center justify-center p-2">
+                    <img src="{{ Vite::asset('resources/assets/logo.svg') }}" alt="GoldVault" class="w-full h-full object-contain">
                 </div>
                 <span class="text-xl font-semibold text-white hidden sm:block" style="font-family: 'Playfair Display';">Gold<span class="text-[#D4AF37]">Vault</span></span>
             </a>
@@ -255,7 +256,9 @@
                                 <tr class="border-b border-[#D4AF37]/10 hover:bg-[#D4AF37]/5 transition-colors">
                                     <td class="py-4 px-6">
                                         <div class="flex items-center gap-3">
-                                            <span class="text-2xl">🥇</span>
+                                            <div class="w-10 h-10 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><circle cx="8" cy="8" r="6"></circle><path d="M18.09 10.37A6 6 0 1 1 10.34 18"></path><path d="M7 6h1v4"></path><path d="m16.71 13.88.7.71-2.82 2.82"></path></svg>
+                                            </div>
                                             <div>
                                                 <p class="text-white font-medium">Gold</p>
                                                 <p class="text-xs text-[#666]">Spot Price</p>
@@ -441,8 +444,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12">
                 <div class="lg:col-span-2">
                     <a class="flex items-center gap-3 mb-6" href="/">
-                        <div class="w-12 h-12 bg-gradient-to-br from-[#D4AF37] to-[#B8860B] rounded-lg flex items-center justify-center">
-                            <span class="text-[#0A0A0A] font-bold text-2xl">G</span>
+                        <div class="w-12 h-12 bg-gradient-to-br from-[#D4AF37] to-[#B8860B] rounded-lg flex items-center justify-center p-2.5">
+                            <img src="{{ Vite::asset('resources/assets/logo.svg') }}" alt="GoldVault" class="w-full h-full object-contain">
                         </div>
                         <span class="text-2xl font-semibold text-white" style="font-family: 'Playfair Display';">Gold<span class="text-[#D4AF37]">Vault</span></span>
                     </a>
