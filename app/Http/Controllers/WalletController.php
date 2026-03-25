@@ -170,4 +170,18 @@ class WalletController extends Controller
         
         return view('wallet.deposit-bank', compact('amount', 'bankAccounts', 'reference'));
     }
+
+    public function locations(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+        
+        // Get holdings grouped by location
+        $holdingsByLocation = $this->userHoldingService->getHoldingsGroupedByLocation($user);
+        
+        // Get all vaults for reference
+        $vaults = \App\Models\Vault::where('is_active', true)->get();
+        
+        return view('wallet.locations', compact('holdingsByLocation', 'vaults'));
+    }
 }

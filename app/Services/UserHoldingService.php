@@ -202,4 +202,58 @@ class UserHoldingService
 
         return $holding->fresh();
     }
+
+    /**
+     * Get all active holdings for a user, grouped by storage location/vault
+     */
+    public function getHoldingsGroupedByLocation(User $user): array
+    {
+        $holdings = $user->activeHoldings()
+            ->with(['product', 'vault'])
+            ->get();
+
+        $grouped = [
+            'vault' => [],
+            'personal' => [],
+        ];
+
+        foreach ($holdings as $holding) {
+            $locationKey = $holding->storage_location === 'personal' ? 'personal' : 'vault';
+            
+            if ($locationKey === 'vault' && $holding->vault) {
+                $vaultId = $holding->vault_id;
+                
+                if (!isset($grouped['vault'][$vaultId])) {
+                    $grouped['vault'][$vaultId] = [
+                        'vault' => $holding->vault,
+                        'location_name' => $holding->vault->city . ', ' . $holding->vault->country,
+                        'total_items' => 0,
+                        'total_value' => 0,
+                        'holdings' => [],
+                    ];
+                }
+                
+                $grouped['vault'][$vaultId]['total_items'] += $holding->quantity;
+                $grouped['vault'][$vaultId]['total_value'] += $holding->current_value;
+                $grouped['vault'][$vaultId]['holdings'][] = $holding;
+            } else {
+                // Personal storage
+                if (!isset($grouped['personal']['personal'])) {
+                    $grouped['personal']['personal'] = [
+                        'vault' => null,
+                        'location_name' => 'Personal Storage',
+                        'total_items' => 0,
+                        'total_value' => 0,
+                        'holdings' => [],
+                    ];
+                }
+                
+                $grouped['personal']['personal']['total_items'] += $holding->quantity;
+                $grouped['personal']['personal']['total_value'] += $holding->current_value;
+                $grouped['personal']['personal']['holdings'][] = $holding;
+            }
+        }
+
+        return $grouped;
+    }
 }

@@ -49,6 +49,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/wallet/deposit/crypto', [WalletController::class, 'depositCrypto'])->name('wallet.deposit.crypto');
     Route::get('/wallet/deposit/bank', [WalletController::class, 'depositBank'])->name('wallet.deposit.bank');
     Route::get('/wallet/deposit/pending', [WalletController::class, 'pendingDeposit'])->name('wallet.deposit.pending');
+    Route::get('/wallet/locations', [WalletController::class, 'locations'])->name('wallet.locations');
     Route::post('/orders/buy', [OrderController::class, 'buy'])->name('orders.buy')->middleware('throttle:10,1');
     Route::post('/orders/sell', [OrderController::class, 'sell'])->name('orders.sell')->middleware('throttle:10,1');
     Route::get('/ira', [IraController::class, 'index'])->name('ira.index');
