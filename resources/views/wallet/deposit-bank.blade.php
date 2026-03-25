@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Transfer Deposit - GoldVault</title>
+    <title>Bank Transfer Deposit - GoldBroker</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#0A0A0A] text-white" style="font-family: 'Inter', sans-serif;">
@@ -185,7 +185,7 @@
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="text-[#D4AF37] mt-0.5">3.</span>
-                                <span>Third-party transfers are not accepted. Account holder name must match your GoldVault profile</span>
+                                <span>Third-party transfers are not accepted. Account holder name must match your GoldBroker profile</span>
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="text-[#D4AF37] mt-0.5">4.</span>
@@ -263,7 +263,7 @@
 <footer class="bg-[#0A0A0A] border-t border-[#D4AF37]/20 py-6">
     <div class="section-container">
         <div class="section-inner flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="text-sm text-[#666]">© {{ date('Y') }} GoldVault. All rights reserved.</div>
+            <div class="text-sm text-[#666]">© {{ date('Y') }} GoldBroker. All rights reserved.</div>
             <div class="flex items-center gap-6">
                 <a href="#" class="text-sm text-[#666] hover:text-[#D4AF37] transition-colors">Privacy Policy</a>
                 <a href="#" class="text-sm text-[#666] hover:text-[#D4AF37] transition-colors">Terms of Use</a>

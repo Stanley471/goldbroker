@@ -23,7 +23,7 @@
                 <div class="w-8 h-8 bg-gradient-to-br from-[#D4AF37] to-[#B8860B] rounded-lg flex items-center justify-center">
                     <span class="text-[#0A0A0A] font-bold text-sm">G</span>
                 </div>
-                <span class="text-lg font-semibold text-white hidden sm:block" style="font-family: 'Playfair Display';">Gold<span class="text-[#D4AF37]">Vault</span></span>
+                <span class="text-lg font-semibold text-white hidden sm:block" style="font-family: 'Playfair Display';">Gold<span class="text-[#D4AF37]">Broker</span></span>
             </a>
 
             {{-- Desktop Links --}}

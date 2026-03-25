@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoldVault - Buy & Sell Physical Gold</title>
+    <title>GoldBroker - Buy & Sell Physical Gold</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#0A0A0A] text-white" style="font-family: 'Inter', sans-serif;">
@@ -104,7 +104,7 @@
                         Investing in Physical <span class="gold-text">Gold</span> and <span class="gold-text">Silver</span>
                     </h1>
                     <p class="text-lg md:text-xl text-[#A0A0A0] leading-relaxed mb-8 max-w-2xl">
-                        GoldVault offers a high-end solution enabling individuals and companies to invest in physical gold or silver, in the form of certified bullion bars and coins. Precious metals are held in your own name and stored outside the banking system.
+                        GoldBroker offers a high-end solution enabling individuals and companies to invest in physical gold or silver, in the form of certified bullion bars and coins. Precious metals are held in your own name and stored outside the banking system.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 mb-12">
                         <a href="{{ route('register') }}" class="btn-primary group">
@@ -446,7 +446,7 @@
                         </div>
                         <span class="text-2xl font-semibold text-white" style="font-family: 'Playfair Display';">Gold<span class="text-[#D4AF37]">Vault</span></span>
                     </a>
-                    <p class="text-[#A0A0A0] text-sm leading-relaxed mb-6">GoldVault offers a high-end solution enabling individuals and companies to invest in physical gold and silver, stored securely outside the banking system.</p>
+                    <p class="text-[#A0A0A0] text-sm leading-relaxed mb-6">GoldBroker offers a high-end solution enabling individuals and companies to invest in physical gold and silver, stored securely outside the banking system.</p>
                 </div>
                 <div>
                     <h4 class="text-white font-semibold mb-4">Services</h4>
@@ -481,7 +481,7 @@
     <div class="border-t border-[#D4AF37]/10">
         <div class="section-container py-6">
             <div class="section-inner flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="text-sm text-[#666]">© {{ date('Y') }} GoldVault. All rights reserved.</div>
+                <div class="text-sm text-[#666]">© {{ date('Y') }} GoldBroker. All rights reserved.</div>
                 <div class="flex items-center gap-6">
                     <a href="#" class="text-sm text-[#666] hover:text-[#D4AF37] transition-colors">Privacy Policy</a>
                     <a href="#" class="text-sm text-[#666] hover:text-[#D4AF37] transition-colors">Terms of Use</a>

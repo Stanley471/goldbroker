@@ -1,6 +1,6 @@
 @extends('layouts.user')
 
-@section('title', 'KYC Details - GoldVault')
+@section('title', 'KYC Details - GoldBroker')
 
 @section('content')
 <div class="mb-8">

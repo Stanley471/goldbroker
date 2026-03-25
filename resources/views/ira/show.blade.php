@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRA Account - GoldVault</title>
+    <title>IRA Account - GoldBroker</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#0A0A0A] text-white" style="font-family: 'Inter', sans-serif;">
@@ -152,7 +152,7 @@
 <footer class="border-t border-[#D4AF37]/10 py-6 mt-10">
     <div class="section-container">
         <div class="section-inner flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="text-sm text-[#666]">© {{ date('Y') }} GoldVault. All rights reserved.</div>
+            <div class="text-sm text-[#666]">© {{ date('Y') }} GoldBroker. All rights reserved.</div>
             <div class="flex items-center gap-6">
                 <a href="#" class="text-sm text-[#666] hover:text-[#D4AF37] transition-colors">Privacy Policy</a>
                 <a href="#" class="text-sm text-[#666] hover:text-[#D4AF37] transition-colors">Terms of Use</a>

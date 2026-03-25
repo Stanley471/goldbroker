@@ -18,7 +18,7 @@
             <div class="grid grid-cols-2 gap-6 mb-6">
                 <div>
                     <label class="block text-sm text-[#A0A0A0] mb-2">Account Name *</label>
-                    <input type="text" name="account_name" value="{{ old('account_name') }}" placeholder="e.g. GoldVault Inc." required
+                    <input type="text" name="account_name" value="{{ old('account_name') }}" placeholder="e.g. GoldBroker Inc." required
                         class="w-full bg-[#0A0A0A] border border-[#D4AF37]/30 rounded-xl px-4 py-3 text-white placeholder-[#666] focus:border-[#D4AF37] focus:outline-none transition-colors">
                     @error('account_name') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
