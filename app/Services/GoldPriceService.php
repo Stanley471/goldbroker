@@ -33,7 +33,7 @@ class GoldPriceService
     }
     public function getCurrentPrice(): ?GoldPrice
 {
-    return Cache::remember('current_gold_price', 900, function () {
+    return Cache::remember('current_gold_price', 1, function () {
         return GoldPrice::latest('fetched_at')->first();
     });
 }

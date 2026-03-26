@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Models\GoldPrice;
+use App\Observers\GoldPriceObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,16 +21,17 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {
-        // Share cart count with all views
-        View::composer('*', function ($view) {
-            if (auth()->check()) {
-                $cart = auth()->user()->cart;
-                $cartItemCount = $cart ? $cart->items()->sum('quantity') : 0;
-            } else {
-                $cartItemCount = 0;
-            }
-            $view->with('cartItemCount', $cartItemCount);
-        });
-    }
+{
+    View::composer('*', function ($view) {
+        if (auth()->check()) {
+            $cart = auth()->user()->cart;
+            $cartItemCount = $cart ? $cart->items()->sum('quantity') : 0;
+        } else {
+            $cartItemCount = 0;
+        }
+        $view->with('cartItemCount', $cartItemCount);
+    });
+    
+    GoldPrice::observe(new GoldPriceObserver());
+}
 }
