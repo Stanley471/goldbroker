@@ -35,6 +35,24 @@ Route::get('/dashboard', function () {
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
+// Static Pages
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
+Route::post('/contact', function () {
+    // Simple contact form handler - just redirect with success message
+    return redirect()->route('contact')->with('success', 'Thank you for your message. We will get back to you soon!');
+})->name('contact.submit');
+
+Route::get('/faq', function () {
+    return view('faq');
+})->name('faq');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

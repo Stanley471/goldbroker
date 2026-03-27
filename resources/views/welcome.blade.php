@@ -50,11 +50,11 @@
                 <span class="text-xl font-semibold text-white hidden sm:block" style="font-family: 'Playfair Display';">Gold<span class="text-[#D4AF37]">Vault</span></span>
             </a>
             <div class="hidden lg:flex items-center gap-1">
-                <a href="/products" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
+                <a href="{{ route('products.index') }}" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
                     Buy Gold & Silver
                     <span class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#D4AF37] transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span>
                 </a>
-                <a href="/storage" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
+                <a href="{{ route('wallet.locations') }}" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
                     Storage
                     <span class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#D4AF37] transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span>
                 </a>
@@ -62,8 +62,12 @@
                     IRA
                     <span class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#D4AF37] transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span>
                 </a>
-                <a href="/about" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
+                <a href="{{ route('about') }}" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
                     About
+                    <span class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#D4AF37] transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span>
+                </a>
+                <a href="{{ route('faq') }}" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
+                    FAQ
                     <span class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#D4AF37] transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span>
                 </a>
             </div>
@@ -454,7 +458,7 @@
                 <div>
                     <h4 class="text-white font-semibold mb-4">Services</h4>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Vault Storage</a></li>
+                        <li><a href="{{ route('wallet.locations') }}" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Vault Storage</a></li>
                         <li><a href="{{ route('ira.index') }}" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">IRA Investment</a></li>
                         <li><a href="#" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Buyback Program</a></li>
                         <li><a href="{{ route('referrals.index') }}" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Referral Program</a></li>
@@ -463,9 +467,9 @@
                 <div>
                     <h4 class="text-white font-semibold mb-4">Company</h4>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">About Us</a></li>
-                        <li><a href="#" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Contact</a></li>
-                        <li><a href="#" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">FAQ</a></li>
+                        <li><a href="{{ route('about') }}" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">About Us</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Contact</a></li>
+                        <li><a href="{{ route('faq') }}" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">FAQ</a></li>
                     </ul>
                 </div>
                 <div>

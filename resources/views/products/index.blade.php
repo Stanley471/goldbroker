@@ -23,7 +23,7 @@
                     <span class="text-sm font-semibold text-[#D4AF37] flex-shrink-0">${{ number_format($goldPrice->price_per_gram_usd, 2) }}/g</span>
                 @endif
             </div>
-            <a href="/contact" class="hidden sm:flex items-center gap-1.5 text-xs text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Contact us</a>
+            <a href="{{ route('contact') }}" class="hidden sm:flex items-center gap-1.5 text-xs text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Contact us</a>
         </div>
     </div>
 </div>
@@ -38,10 +38,11 @@
                 <span class="hidden sm:block text-lg font-semibold text-white" style="font-family: 'Playfair Display';">Gold<span class="text-[#D4AF37]">Vault</span></span>
             </a>
             <div class="hidden lg:flex items-center gap-1">
-                <a href="/products" class="px-3 py-2 text-sm text-[#D4AF37] transition-colors">Buy Gold & Silver</a>
-                <a href="#" class="px-3 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors">Storage</a>
-                <a href="{{ route('ira.index') }}" class="px-3 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors">IRA</a>
-                <a href="/about" class="px-3 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors">About</a>
+                <a href="/products" class="px-3 py-2 text-sm {{ request()->routeIs('products.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Buy Gold & Silver</a>
+                <a href="{{ route('wallet.locations') }}" class="px-3 py-2 text-sm {{ request()->routeIs('wallet.locations') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Storage</a>
+                <a href="{{ route('ira.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('ira.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">IRA</a>
+                <a href="{{ route('about') }}" class="px-3 py-2 text-sm {{ request()->routeIs('about') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">About</a>
+                <a href="{{ route('faq') }}" class="px-3 py-2 text-sm {{ request()->routeIs('faq') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">FAQ</a>
             </div>
             <div class="flex items-center gap-2">
                 @auth
