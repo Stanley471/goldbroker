@@ -53,6 +53,11 @@ Route::get('/faq', function () {
     return view('faq');
 })->name('faq');
 
+Route::get('/vault-locations', function () {
+    $vaults = \App\Models\Vault::where('is_active', true)->get();
+    return view('vault-locations', compact('vaults'));
+})->name('vault-locations');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

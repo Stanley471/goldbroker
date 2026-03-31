@@ -54,7 +54,7 @@
                     Buy Gold & Silver
                     <span class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#D4AF37] transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span>
                 </a>
-                <a href="{{ route('wallet.locations') }}" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
+                <a href="{{ route('vault-locations') }}" class="px-4 py-2 text-sm text-[#A0A0A0] hover:text-white transition-colors relative group">
                     Storage
                     <span class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#D4AF37] transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span>
                 </a>
@@ -458,7 +458,7 @@
                 <div>
                     <h4 class="text-white font-semibold mb-4">Services</h4>
                     <ul class="space-y-3">
-                        <li><a href="{{ route('wallet.locations') }}" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Vault Storage</a></li>
+                        <li><a href="{{ route('vault-locations') }}" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Vault Storage</a></li>
                         <li><a href="{{ route('ira.index') }}" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">IRA Investment</a></li>
                         <li><a href="#" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Buyback Program</a></li>
                         <li><a href="{{ route('referrals.index') }}" class="text-sm text-[#A0A0A0] hover:text-[#D4AF37] transition-colors">Referral Program</a></li>

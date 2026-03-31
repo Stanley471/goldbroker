@@ -39,7 +39,7 @@
             </a>
             <div class="hidden lg:flex items-center gap-1">
                 <a href="/products" class="px-3 py-2 text-sm {{ request()->routeIs('products.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Buy Gold & Silver</a>
-                <a href="{{ route('wallet.locations') }}" class="px-3 py-2 text-sm {{ request()->routeIs('wallet.locations') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Storage</a>
+                <a href="{{ route('vault-locations') }}" class="px-3 py-2 text-sm {{ request()->routeIs('vault-locations') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">Storage</a>
                 <a href="{{ route('ira.index') }}" class="px-3 py-2 text-sm {{ request()->routeIs('ira.*') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">IRA</a>
                 <a href="{{ route('about') }}" class="px-3 py-2 text-sm {{ request()->routeIs('about') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">About</a>
                 <a href="{{ route('faq') }}" class="px-3 py-2 text-sm {{ request()->routeIs('faq') ? 'text-[#D4AF37]' : 'text-[#A0A0A0] hover:text-white' }} transition-colors">FAQ</a>
