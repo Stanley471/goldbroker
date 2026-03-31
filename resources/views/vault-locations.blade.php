@@ -75,6 +75,14 @@
             <div class="mb-16">
                 <h2 class="text-3xl font-bold text-white mb-8 text-center" style="font-family: 'Playfair Display';">Our Global Network</h2>
                 
+                {{-- Storage Partner --}}
+                <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-8 mb-10">
+                    <h3 class="text-xl font-semibold text-[#D4AF37] mb-4">Our Storage Partner</h3>
+                    <p class="text-[#A0A0A0] leading-relaxed">
+                        Storage is managed by our partner <strong class="text-white">Malca-Amit</strong>, a private operator independent from the international banking system. Founded in 1963, Malca-Amit is a trusted storage partner for financial institutions and high net-worth individuals around the world. Malca-Amit's highly-secured, strategically located storage facilities are recognized as market leaders. Their facilities include a division dedicated to a unique set of value-added services for those needing storage of bullion.
+                    </p>
+                </div>
+                
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach($vaults as $vault)
                     <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl overflow-hidden hover:border-[#D4AF37]/50 transition-colors">
