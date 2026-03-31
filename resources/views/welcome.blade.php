@@ -95,9 +95,9 @@
 <main class="min-h-screen bg-[#0A0A0A]">
 
     {{-- Hero --}}
-    <section class="relative min-h-screen flex items-center overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/90 to-transparent z-10"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent z-10"></div>
+    <section class="relative min-h-screen flex items-center overflow-hidden" style="background-image: url('/hero.jpg'); background-size: cover; background-position: center;">
+        <div class="absolute inset-0 bg-[#0A0A0A]/20 z-10"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-[#0A0A0A]/30 z-10"></div>
         <div class="relative z-20 section-container pt-32 pb-20">
             <div class="section-inner">
                 <div class="max-w-3xl">
