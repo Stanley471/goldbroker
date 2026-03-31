@@ -17,7 +17,7 @@
                 <div class="w-8 h-8 bg-gradient-to-br from-[#D4AF37] to-[#B8860B] rounded-lg flex items-center justify-center p-1.5">
                     <img src="{{ Vite::asset('resources/assets/logo.svg') }}" alt="GoldVault" class="w-full h-full object-contain">
                 </div>
-                <span class="hidden sm:block text-base font-semibold text-white" style="font-family: 'Playfair Display';">Gold<span class="text-[#D4AF37]">Vault</span> <span class="text-xs text-[#A0A0A0] font-normal">Admin</span></span>
+                <span class="text-base font-semibold text-white" style="font-family: 'Playfair Display';">Gold<span class="text-[#D4AF37]">Vault</span> <span class="text-xs text-[#A0A0A0] font-normal">Admin</span></span>
             </a>
 
             <div class="hidden lg:flex items-center gap-1">
