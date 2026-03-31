@@ -49,6 +49,7 @@
                     @endif
                 </a>
 
+                @auth
                 <div class="hidden sm:flex items-center gap-2 px-3 py-2 text-sm text-[#A0A0A0]">
                     <div class="w-7 h-7 bg-[#D4AF37]/20 rounded-full flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -59,6 +60,7 @@
                     @csrf
                     <button type="submit" class="hidden sm:block text-xs text-[#A0A0A0] hover:text-red-400 transition-colors px-2 py-1">Logout</button>
                 </form>
+                @endauth
 
                 {{-- Mobile hamburger --}}
                 <button @click="open = !open" class="lg:hidden p-2 text-[#A0A0A0] hover:text-white transition-colors">
@@ -88,13 +90,14 @@
                     @endif
                 </a>
 
-                <div class="border-t border-[#D4AF37]/10 mt-2 pt-2 flex items-center justify-between px-4">
+             @auth   <div class="border-t border-[#D4AF37]/10 mt-2 pt-2 flex items-center justify-between px-4">
                     <span class="text-sm text-[#A0A0A0]">{{ auth()->user()->first_name }}</span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="text-xs text-red-400">Logout</button>
                     </form>
                 </div>
+                @endauth
             </div>
         </div>
     </div>
