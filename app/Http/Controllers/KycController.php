@@ -92,7 +92,7 @@ class KycController extends Controller
             // Send KYC submitted email
             Mail::to($user->email)->send(new KycSubmitted($user, $submission));
 
-            return redirect()->route('kyc.index')
+            return redirect()->route('kyc.gate')
                 ->with('success', 'Your KYC documents have been submitted successfully. We will review them shortly.');
         } catch (\Exception $e) {
             // Clean up any stored files if something went wrong

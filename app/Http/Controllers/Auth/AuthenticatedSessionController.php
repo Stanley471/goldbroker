@@ -32,12 +32,18 @@ class AuthenticatedSessionController extends Controller
         /** @var \App\Models\User $user */
         $user = auth()->user();
 
-if ($user->hasRole('admin')) {
-    return redirect()->route('admin.dashboard');
-}
+        // Check if user is admin
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.dashboard');
+        }
 
-return redirect()->intended(route('dashboard', absolute: false));
+        // Check KYC status for non-admin users
+        if (!$user->isKycVerified()) {
+            // Redirect to KYC gate page
+            return redirect()->route('kyc.gate');
+        }
 
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**

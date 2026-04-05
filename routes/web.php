@@ -58,13 +58,18 @@ Route::get('/vault-locations', function () {
     return view('vault-locations', compact('vaults'));
 })->name('vault-locations');
 
-Route::middleware('auth')->group(function () {
+// KYC Gate route - accessible to all authenticated users (without kyc middleware)
+Route::middleware(['auth', 'verified'])->get('/kyc-gate', function () {
+    return view('kyc.gate', ['user' => auth()->user()]);
+})->name('kyc.gate');
+
+Route::middleware(['auth', 'kyc'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'kyc'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
     Route::get('/wallet/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
