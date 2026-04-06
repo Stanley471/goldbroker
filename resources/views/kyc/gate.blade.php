@@ -3,9 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KYC Verification Required - GoldBroker</title>
+    <title>Profile Verification - GoldBroker</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        .verify-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+            background: transparent;
+            border-radius: 9999px;
+            padding: 14px 36px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .verify-btn:hover {
+            background: #D4AF37;
+            color: #0A0A0A;
+        }
+        .verify-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        .dropdown-text {
+            color: #A0A0A0;
+            font-size: 14px;
+            line-height: 2;
+            text-align: center;
+            padding-bottom: 24px;
+        }
+    </style>
 </head>
 <body class="bg-[#0A0A0A] text-white" style="font-family: 'Inter', sans-serif;">
 
@@ -26,90 +63,113 @@
     </div>
 </nav>
 
-<main class="min-h-screen bg-[#0A0A0A] pt-20 pb-20">
+<main class="min-h-screen bg-[#0A0A0A] pt-8 pb-20">
     <div class="section-container">
-        <div class="section-inner">
-            <div class="max-w-2xl mx-auto text-center">
-                
-                @php
-                    $status = $user->kyc_status ?? 'not_submitted';
-                    $latestSubmission = $user->latestKycSubmission;
-                @endphp
+        <div class="section-inner max-w-lg mx-auto">
 
-                @if($status === 'verified')
-                    {{-- KYC Approved --}}
-                    <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M20 6 9 17l-5-5"></path></svg>
-                    </div>
-                    <h1 class="text-3xl font-bold text-white mb-4" style="font-family: 'Playfair Display';">KYC Verified!</h1>
-                    <p class="text-[#A0A0A0] mb-8">Your identity has been verified. You now have full access to your account.</p>
-                    <a href="{{ route('dashboard') }}" class="btn-primary">Go to Dashboard</a>
+            @php
+                $status = $user->kyc_status ?? 'not_submitted';
+                $latestSubmission = $user->latestKycSubmission;
+            @endphp
 
-                @elseif($latestSubmission && $latestSubmission->status === 'pending')
-                    {{-- KYC Pending --}}
-                    <div class="w-20 h-20 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            @if($status === 'verified')
+                {{-- KYC Approved --}}
+                <div class="bg-[#1a1a1a] rounded-2xl p-8 text-center mb-6">
+                    <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M20 6 9 17l-5-5"></path></svg>
                     </div>
-                    <h1 class="text-3xl font-bold text-white mb-4" style="font-family: 'Playfair Display';">Verification Pending</h1>
-                    <p class="text-[#A0A0A0] mb-4">Your KYC documents have been submitted and are under review.</p>
-                    <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 mb-8">
-                        <p class="text-sm text-[#A0A0A0] mb-2">Submission ID: <span class="text-white">#{{ $latestSubmission->id }}</span></p>
-                        <p class="text-sm text-[#A0A0A0] mb-2">Submitted: <span class="text-white">{{ $latestSubmission->created_at->format('M d, Y H:i') }}</span></p>
-                        <p class="text-sm text-[#A0A0A0]">Status: <span class="text-yellow-500">Pending Review</span></p>
-                    </div>
-                    <p class="text-sm text-[#666] mb-8">We will notify you via email once your verification is complete. This usually takes 24-48 hours.</p>
-                    <a href="{{ route('kyc.index') }}" class="btn-secondary">View Submission</a>
+                    <h1 class="text-2xl font-bold text-white mb-2" style="font-family: 'Playfair Display';">KYC Verified!</h1>
+                    <p class="text-[#A0A0A0] mb-6">Your identity has been verified successfully.</p>
+                    <a href="{{ route('dashboard') }}" class="btn-primary w-full">Go to Dashboard</a>
+                </div>
 
-                @elseif($latestSubmission && $latestSubmission->status === 'rejected')
-                    {{-- KYC Rejected --}}
-                    <div class="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+            @elseif($latestSubmission && $latestSubmission->status === 'pending')
+                {{-- KYC Pending --}}
+                <div class="bg-[#1a1a1a] rounded-2xl p-8 text-center mb-6">
+                    <div class="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     </div>
-                    <h1 class="text-3xl font-bold text-white mb-4" style="font-family: 'Playfair Display';">Verification Rejected</h1>
-                    <p class="text-[#A0A0A0] mb-6">Your KYC verification could not be approved.</p>
-                    
+                    <h1 class="text-2xl font-bold text-white mb-2" style="font-family: 'Playfair Display';">Verification Pending</h1>
+                    <p class="text-[#A0A0A0] mb-2">Your documents are under review.</p>
+                    <p class="text-sm text-[#666]">Submitted: {{ $latestSubmission->created_at->format('M d, Y') }}</p>
+                </div>
+
+            @elseif($latestSubmission && $latestSubmission->status === 'rejected')
+                {{-- KYC Rejected --}}
+                <div class="bg-[#1a1a1a] rounded-2xl p-8 text-center mb-6">
+                    <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                    </div>
+                    <h1 class="text-2xl font-bold text-white mb-2" style="font-family: 'Playfair Display';">Verification Rejected</h1>
                     @if($latestSubmission->admin_notes)
-                    <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6 mb-8 text-left">
-                        <p class="text-sm text-red-400 font-semibold mb-2">Reason:</p>
-                        <p class="text-[#A0A0A0]">{{ $latestSubmission->admin_notes }}</p>
-                    </div>
+                        <p class="text-red-400 text-sm mb-4">{{ $latestSubmission->admin_notes }}</p>
                     @endif
+                    <a href="{{ route('kyc.create') }}" class="btn-primary w-full">Resubmit Documents</a>
+                </div>
 
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a href="{{ route('kyc.create') }}" class="btn-primary">Resubmit Documents</a>
-                        <a href="{{ route('contact') }}" class="btn-secondary">Contact Support</a>
-                    </div>
-
-                @else
-                    {{-- KYC Not Submitted --}}
-                    <div class="w-20 h-20 bg-[#D4AF37]/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    </div>
-                    <h1 class="text-3xl font-bold text-white mb-4" style="font-family: 'Playfair Display';">Identity Verification Required</h1>
-                    <p class="text-[#A0A0A0] mb-6">Before you can access your account and start investing, we need to verify your identity. This is a one-time process required by regulations.</p>
+            @else
+                {{-- KYC Not Submitted - Main Design --}}
+                
+                {{-- Main Card --}}
+                <div class="bg-[#1a1a1a] rounded-2xl p-8 text-center mb-6">
+                    <p class="text-[#A0A0A0] mb-8" style="margin-bottom: 32px;">Start your profile verification process by clicking on the button below.</p>
                     
-                    <div class="bg-[#141414] border border-[#D4AF37]/20 rounded-xl p-6 mb-8 text-left">
-                        <h3 class="text-white font-semibold mb-4">What you'll need:</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-center gap-3 text-[#A0A0A0]">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                                Government-issued ID (front & back)
-                            </li>
-                            <li class="flex items-center gap-3 text-[#A0A0A0]">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                Selfie video for liveness check
-                            </li>
-                            <li class="flex items-center gap-3 text-[#A0A0A0]">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#D4AF37]"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                Takes about 5 minutes
-                            </li>
-                        </ul>
-                    </div>
+                    {{-- Verify Button - Custom Styled --}}
+                    <a href="{{ route('kyc.create') }}" class="verify-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <span>Verify</span>
+                    </a>
+                </div>
 
-                    <a href="{{ route('kyc.create') }}" class="btn-primary">Start Verification</a>
-                @endif
+                {{-- Requirements Dropdowns --}}
+                <div class="bg-[#1a1a1a] rounded-2xl overflow-hidden">
+                    
+                    {{-- Identity --}}
+                    <details class="border-b border-[#333] group">
+                        <summary class="w-full flex items-center justify-between p-5 text-left hover:bg-[#252525] transition-colors cursor-pointer list-none">
+                            <div class="flex items-center gap-3">
+                                <span class="text-white font-medium">Identity</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#4A9EFF]"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#A0A0A0] transition-transform duration-300 group-open:rotate-180"><path d="m6 9 6 6 6-6"></path></svg>
+                        </summary>
+                        <div class="px-5 text-center">
+                            <p class="dropdown-text">Verify your identity by uploading proof of identity (Government-issued ID: Passport, Driver's License, or National ID card).</p>
+                        </div>
+                    </details>
 
-            </div>
+                    {{-- Address --}}
+                    <details class="border-b border-[#333] group">
+                        <summary class="w-full flex items-center justify-between p-5 text-left hover:bg-[#252525] transition-colors cursor-pointer list-none">
+                            <div class="flex items-center gap-3">
+                                <span class="text-white font-medium">Address</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#4A9EFF]"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#A0A0A0] transition-transform duration-300 group-open:rotate-180"><path d="m6 9 6 6 6-6"></path></svg>
+                        </summary>
+                        <div class="px-5 text-center">
+                            <p class="dropdown-text">Verify your address by uploading proof of address (Utility bill, Bank statement, or Government document not older than 3 months).</p>
+                        </div>
+                    </details>
+
+                    {{-- Bank Account --}}
+                    <details class="group">
+                        <summary class="w-full flex items-center justify-between p-5 text-left hover:bg-[#252525] transition-colors cursor-pointer list-none">
+                            <div class="flex items-center gap-3">
+                                <span class="text-white font-medium">Bank account</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#4A9EFF]"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#A0A0A0] transition-transform duration-300 group-open:rotate-180"><path d="m6 9 6 6 6-6"></path></svg>
+                        </summary>
+                        <div class="px-5 text-center">
+                            <p class="dropdown-text">Verify your bank account by uploading bank statement or void check showing your account details for withdrawal purposes.</p>
+                        </div>
+                    </details>
+
+                </div>
+
+            @endif
+
         </div>
     </div>
 </main>
